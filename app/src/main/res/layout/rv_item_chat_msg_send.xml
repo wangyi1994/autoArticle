@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="50dp"
+
+        >
+
+        <LinearLayout
+            android:id="@+id/container1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/chat_msg_send_bg"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
+                <Button
+                    android:id="@+id/speeched"
+                    android:background="@mipmap/speeched"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center_vertical"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="#BDBDBD">
+
+                </View>
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_gravity="center_vertical"
+                android:id="@+id/layout_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_toLeftOf="@+id/speeched"
+                android:layout_marginLeft="10dp"
+                >
+
+                <TextView
+                    android:id="@+id/textview_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp" />
+
+
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:id="@+id/layout_message_correct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/item_correct_bg"
+            android:layout_below="@+id/container1"
+            android:orientation="horizontal"
+            >
+            <RelativeLayout
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_toLeftOf="@+id/speeched"
+                android:layout_marginLeft="10dp"
+                >
+
+                <TextView
+                    android:id="@+id/textview_message_correct"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp" />
+
+
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+
+
+    </RelativeLayout>
+</FrameLayout>

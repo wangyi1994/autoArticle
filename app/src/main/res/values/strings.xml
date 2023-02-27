@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Oral Craft</string>
+    <string name="input_limit">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`¬!"£$%^*()~=#{}[];':,./?/*-_+</string>
+    <string name="start_code">I\'d be happy to help you improve your English. Let\'s start with a basic conversation and I\'ll guide you along the way. What kind of conversations do you want to practice?</string>
+    <string name="recording">recording</string>
+    <string name="record">record</string>
+</resources>

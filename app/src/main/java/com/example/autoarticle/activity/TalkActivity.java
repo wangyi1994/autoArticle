@@ -1,0 +1,440 @@
+package com.example.autoarticle.activity;
+
+import static android.Manifest.permission.INTERNET;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.RECORD_AUDIO;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.view.MotionEvent.ACTION_DOWN;
+import static android.view.MotionEvent.ACTION_UP;
+
+import static com.example.autoarticle.command.C.TYPE_MSG_RECEIVE;
+import static com.example.autoarticle.command.C.TYPE_MSG_SEND;
+import static com.example.autoarticle.config.config.TALK_ITEM;
+import static com.example.autoarticle.config.config.serviceRegion;
+import static com.example.autoarticle.config.config.speechSubscriptionKey;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+
+import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.autoarticle.NetWork.RetrofitManager;
+import com.example.autoarticle.R;
+import com.example.autoarticle.adapter.ChatDetailAdapter;
+import com.example.autoarticle.NetWork.requests;
+import com.example.autoarticle.command.C;
+import com.example.autoarticle.model.ChatMessage;
+import com.example.autoarticle.model.OralChatBean;
+import com.example.autoarticle.model.character;
+import com.example.autoarticle.model.resultBean;
+import com.example.autoarticle.model.talkBean;
+import com.example.autoarticle.model.talkListBean;
+import com.example.autoarticle.utils.AudioRecoderUtils;
+import com.google.gson.Gson;
+import com.microsoft.cognitiveservices.speech.AudioDataStream;
+import com.microsoft.cognitiveservices.speech.ResultReason;
+import com.microsoft.cognitiveservices.speech.SpeechConfig;
+import com.microsoft.cognitiveservices.speech.SpeechRecognitionResult;
+import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
+import com.microsoft.cognitiveservices.speech.SpeechSynthesisResult;
+import com.microsoft.cognitiveservices.speech.SpeechSynthesizer;
+import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.Future;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
+
+/**
+ * @CreateDate: 2022/02/10
+ * @Author: wy
+ * @Description:
+ * @Version:
+ */
+public class TalkActivity extends Activity implements View.OnClickListener {
+
+
+    private talkListBean talkListBean;
+    private RecyclerView mRecyclerView;
+    private TextView teacher_name;
+    private LinearLayoutManager mLinearLayoutManager;
+    private ChatDetailAdapter mChatDetailAdapter;
+    private List<ChatMessage> mChatMessages;
+    private ImageView back;
+    private float mRawX;
+    private float mRawY;
+
+    private Button speech;
+
+    private Button inspire;
+
+    private int requestCode = 5;
+
+    private Retrofit retrofit;
+
+    private String TAG=TalkActivity.class.getSimpleName();
+
+    /**
+     * 当前是否正在播放中
+     */
+    public boolean isPlaying=false;
+    /**
+     * 当前正在播放或暂停中的聊天记录position
+     */
+    public int  playPosition=-1;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_talk);
+        Intent intent=getIntent();
+        if(intent!=null){
+            talkListBean=(talkListBean) intent.getSerializableExtra(TALK_ITEM);
+            if(talkListBean!=null){
+                mChatMessages=talkListBean.getMessages();
+            }
+        }
+        // Initialize SpeechSDK and request required permissions.
+        try {
+            // a unique number within the application to allow
+            // correlating permission request responses with the request.
+            int permissionRequestId = 5;
+
+            // Request permissions needed for speech recognition
+            ActivityCompat.requestPermissions(TalkActivity.this, new String[]{RECORD_AUDIO, READ_EXTERNAL_STORAGE,
+                    WRITE_EXTERNAL_STORAGE ,INTERNET}, permissionRequestId);
+        } catch (Exception ex) {
+            Log.e("SpeechSDK", "could not init sdk, " + ex.toString());
+        }
+        init();
+
+        initViews();
+        if(talkListBean!=null){
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage.setFrom(C.TYPE_MSG_RECEIVE);
+            chatMessage.setCharacter(talkListBean.getCharacter());
+            chatMessage.setMsgContent(talkListBean.getMsgContent());
+        }
+
+        setViewsData();
+        initRetrofit();
+        initVedio();
+
+    }
+    SpeechConfig config;
+    SpeechRecognizer reco;
+    AudioConfig audioConfig;
+    private void init() {
+        audioConfig = AudioConfig.fromDefaultMicrophoneInput();
+        config = SpeechConfig.fromSubscription(speechSubscriptionKey, serviceRegion);
+       // reco = new SpeechRecognizer(config);
+    }
+    private void initRetrofit(){
+        retrofit = RetrofitManager.getInstance().getRetrofit();
+    }
+
+    private void onInspireButtonClicked(){
+        getResult("true");
+    }
+    public void onSpeechButtonClicked(boolean isRecording) {
+
+            if(isRecording){
+                speech.setText(TalkActivity.this.getString(R.string.record));
+                AudioRecoderUtils.getInstance().stopRecording();
+               speech.postDelayed(new Runnable() {
+                   @Override
+                   public void run() {
+                       try  {
+                           AudioConfig audioConfig = AudioConfig.fromWavFileInput(recordingPath);
+                           reco =new SpeechRecognizer(config, audioConfig);
+                           Future<SpeechRecognitionResult> task = reco.recognizeOnceAsync();
+
+                           SpeechRecognitionResult result = task.get();
+
+                           if (result.getReason() == ResultReason.RecognizedSpeech) {
+                               ChatMessage chatMessage = new ChatMessage();
+                               chatMessage.setFrom(TYPE_MSG_SEND);
+                               chatMessage.setMsgContent(result.getText());
+                               chatMessage.setFilePath(recordingPath);
+                               mChatMessages.add(chatMessage);
+                               TalkActivity.this.runOnUiThread(() -> runOnUiThread(() -> {
+                                   speech.setText(TalkActivity.this.getString(R.string.record));
+                                   mChatDetailAdapter.notifyItemInserted(mChatMessages.size());
+                                   mRecyclerView.scrollToPosition(mChatMessages.size() - 1);
+                               }));
+                                getResult("false");
+                           }
+                           else {
+                               TalkActivity.this.runOnUiThread(() -> runOnUiThread(() -> {
+                                   speech.setText(TalkActivity.this.getString(R.string.record));
+                                   Toast.makeText(TalkActivity.this,"Error recognizing. Did you update the subscription info?" + System.lineSeparator() + result.toString()
+                                           ,Toast.LENGTH_SHORT).show();
+                               }));
+                           }
+                       }  catch (Exception ex) {
+                           Log.e("SpeechSDKDemo", "unexpected " + ex.getMessage());
+                       }
+                   }
+               },300);
+            }
+            else{
+                speech.setText(TalkActivity.this.getString(R.string.recording));
+                recordingPath= AudioRecoderUtils.getInstance().startRecording();
+            }
+
+            // Note: this will block the UI thread, so eventually, you want to
+            //       register for the event (see full samples)
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        // in the end, recognizer need to close
+        if (reco != null)
+            reco.close();
+        AudioRecoderUtils.getInstance().stopPlay();
+        super.onDestroy();
+
+    }
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private String getResult(String isInspire){
+
+        List<talkBean> talkBeans=new ArrayList<>();
+        for(int i=mChatMessages.size()-1;i>=0;i--){
+            if(talkBeans.size()==5){
+                break;
+            }
+            ChatMessage message=mChatMessages.get(i);
+            talkBean bean=new talkBean();
+            bean.setRole(message.getFrom()==TYPE_MSG_RECEIVE?talkListBean.getCharacter().getName():"User");
+            bean.setText(message.getMsgContent());
+            talkBeans.add(bean);
+        }
+        Collections.reverse(talkBeans);
+        Gson gson=new Gson();
+        OralChatBean bean=new OralChatBean();
+        bean.setConversations(talkBeans);
+        bean.setScenario(talkListBean.getScene());
+        character character1 =talkListBean.getCharacter();
+        bean.setCharacter(character1);
+        bean.setInspire_me(isInspire);
+        String oralChat=gson.toJson(bean);
+
+        RequestBody requestBody = MultipartBody.create(JSON,oralChat);
+        requests request=retrofit.create(requests.class);
+        Call<ResponseBody> responseBodyCall = request.getResult(requestBody);
+        responseBodyCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try{
+                    if(response==null||response.body()==null){
+                        return;
+                    }
+                    String RESULT=response.body().string().trim();
+                    Log.i("test api","response.body:"+RESULT);
+                    resultBean result=new Gson().fromJson(RESULT,resultBean.class);
+                    ChatMessage chatMessage = new ChatMessage();
+                    if(isInspire.equals("true")){
+                        chatMessage.setFrom(TYPE_MSG_SEND);
+                        chatMessage.setCharacter(talkListBean.getCharacter());
+                        chatMessage.setMsgContent(result.getUser_text());
+                        mChatMessages.add(chatMessage);
+                        mChatDetailAdapter.notifyItemInserted(mChatMessages.size());
+                        mRecyclerView.scrollToPosition(mChatMessages.size() - 1);
+                        getResult("false");
+                    }
+                    else{
+                        chatMessage.setFrom(TYPE_MSG_RECEIVE);
+                        chatMessage.setCharacter(talkListBean.getCharacter());
+                        chatMessage.setMsgContent(result.getAi_text());
+                        mChatMessages.get(mChatMessages.size()-1).setCorrectMsg(result.getCorrected_user_text());
+                        mChatDetailAdapter.notifyItemChanged(mChatMessages.size()-1);
+                        try  {
+
+                            mChatMessages.add(chatMessage);
+                            mChatDetailAdapter.notifyItemInserted(mChatMessages.size());
+                            mRecyclerView.scrollToPosition(mChatMessages.size() - 1);
+                        }
+                        catch (Exception exp){
+
+                        }
+                        speek(chatMessage);
+                    }
+
+                }
+                catch (Exception ex){
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.i("test api","t.body:"+t.getMessage());
+            }
+        });
+        return "";
+    }
+
+
+    private void initViews() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_messages);
+        teacher_name=findViewById(R.id.teacher_name);
+        back=findViewById(R.id.talk_back);
+        if(talkListBean!=null&&talkListBean.getCharacter()!=null){
+            teacher_name.setText(talkListBean.getCharacter().getName());
+        }
+        mLinearLayoutManager = new LinearLayoutManager(TalkActivity.this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        speech = findViewById(R.id.speech);
+        inspire=findViewById(R.id.inspire);
+
+        back.setOnClickListener(this);
+        speech.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction()==ACTION_DOWN ){
+                    onSpeechButtonClicked(false);
+                }
+                else  if(motionEvent.getAction()==ACTION_UP ){
+                    onSpeechButtonClicked(true);
+                }
+                return false;
+            }
+        });
+        inspire.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.inspire:
+                onInspireButtonClicked();
+                break;
+            case R.id.talk_back:
+                TalkActivity.this.finish();
+                break;
+
+        }
+    }
+
+
+    private String recordingPath="";
+
+    //录音功能 初始化
+    private void initVedio(){
+        AudioRecoderUtils.getInstance().init(this);
+    }
+    private void speek(ChatMessage chatMessage) {
+        if(TextUtils.isEmpty(chatMessage.getFilePath())){
+            try  {
+                String path=getCacheDir() + "/" + +System.currentTimeMillis()+ ".wav";
+                AudioConfig audioConfig = AudioConfig.fromWavFileOutput( path);
+                SpeechSynthesizer synthesizer = new SpeechSynthesizer(config, audioConfig);
+                synthesizer.SpeakText(chatMessage.getMsgContent());
+                chatMessage.setFilePath(path);
+            }
+            catch (Exception exp){
+                Log.i(TAG,"speek azure error :"+exp.getMessage());
+            }
+        }
+        AudioRecoderUtils.getInstance().playRecord(chatMessage.getFilePath(), new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mChatDetailAdapter.resetButton(playPosition);
+                TalkActivity.this.isPlaying=false;
+            }
+        });
+    }
+
+    private void setViewsData() {
+        mChatDetailAdapter = new ChatDetailAdapter(TalkActivity.this);
+        mChatDetailAdapter.setChatMessages(mChatMessages);
+        mRecyclerView.setAdapter(mChatDetailAdapter);
+//        mRecyclerView.smoothScrollToPosition(mChatDetailAdapter.getItemCount());
+//        mLinearLayoutManager.scrollToPositionWithOffset(mChatDetailAdapter.getItemCount() + 1, 0);
+        mRecyclerView.scrollToPosition(mChatDetailAdapter.getItemCount() - 1);
+        mChatDetailAdapter.setOnRecyclerViewItemLongClick(new ChatDetailAdapter.OnRecyclerViewItemEvent() {
+            @Override
+            public void onItemSpeechClick(View childView, MotionEvent event, int position) {
+                mChatDetailAdapter.resetButton();
+                if(playPosition==position||playPosition==-1){
+                    playPosition=position;
+                    if(isPlaying){
+                        mChatDetailAdapter.resetButton(playPosition);
+                        AudioRecoderUtils.getInstance().pausePlay();
+                    }
+                    else{
+                        mChatDetailAdapter.setButton(playPosition);
+                        mRecyclerView.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ChatMessage chatMessage = mChatMessages.get(position);
+                                speek(chatMessage);
+                                Log.d(TAG, "chatMessage getMsgContent=" + chatMessage.getMsgContent());
+                            }
+                        },500);
+                    }
+                    isPlaying=!isPlaying;
+                }
+                else{
+                    playPosition=position;
+                    if(isPlaying){
+                        AudioRecoderUtils.getInstance().stopPlay();
+                    }
+                    isPlaying=true;
+                    mChatDetailAdapter.setButton(playPosition);
+                    mRecyclerView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            ChatMessage chatMessage = mChatMessages.get(position);
+                            speek(chatMessage);
+                            Log.d(TAG, "chatMessage getMsgContent=" + chatMessage.getMsgContent());
+                        }
+                    },500);
+
+                }
+            }
+
+            @Override
+            public void onItemLongClick(View childView, MotionEvent event, int position) {
+
+            }
+        });
+    }
+
+
+
+
+
+}
