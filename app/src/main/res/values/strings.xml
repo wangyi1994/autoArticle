@@ -4,4 +4,7 @@
     <string name="start_code">I\'d be happy to help you improve your English. Let\'s start with a basic conversation and I\'ll guide you along the way. What kind of conversations do you want to practice?</string>
     <string name="recording">recording</string>
     <string name="record">record</string>
+    <string name="choose_character_speed_text">语速</string>
+    <string name="choose_character_voice_text">音色</string>
+    <string name="choose_character_level_text">难度</string>
 </resources>

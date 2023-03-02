@@ -13,7 +13,6 @@ import com.example.autoarticle.command.C;
 import com.example.autoarticle.model.talkBean;
 import com.example.autoarticle.NetWork.RetrofitManager;
 import com.example.autoarticle.NetWork.requests;
-import com.example.autoarticle.PopupWindow.CreateScenePopup;
 import com.example.autoarticle.PopupWindow.MainToolPopup;
 import com.example.autoarticle.R;
 import com.example.autoarticle.adapter.talkListAdapter;
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MainToolPopup mPopupWindow;
 
-    private CreateScenePopup createScenePopup;
+
 
     private  List<OptionEntity> optionEntities;
 
@@ -101,14 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 mPopupWindow.dismiss();
                 OptionEntity optionEntity= optionEntities.get(position);
                 if(optionEntity.getOptionName().equals("增加场景")){
-                    if(createScenePopup==null){
-                        if(DataCenter.getInstance().getInitBean().getDefault_scenarios()==null
-                                ||DataCenter.getInstance().getInitBean().getDefault_scenarios().get(0)==null){
-                            return;
-                        }
-                        createScenePopup=new CreateScenePopup(MainActivity.this);
-                    }
-                    createScenePopup.showPopupWindow(MainActivity.this.getWindow().getDecorView().getRootView());
+
                 }
 
             }

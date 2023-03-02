@@ -1,7 +1,5 @@
 package com.example.autoarticle.PopupWindow;
 
-import static com.example.autoarticle.activity.TalkActivity.JSON;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
@@ -15,25 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.autoarticle.NetWork.RetrofitManager;
-import com.example.autoarticle.NetWork.requests;
 import com.example.autoarticle.R;
 import com.example.autoarticle.activity.MainActivity;
-import com.example.autoarticle.adapter.makeSceneAdapter;
-import com.example.autoarticle.model.CreateResult;
+import com.example.autoarticle.adapter.voiceAdapter;
 import com.example.autoarticle.model.DataCenter;
-import com.example.autoarticle.model.OralChatBean;
-import com.example.autoarticle.model.character;
 import com.example.autoarticle.model.initBean;
-import com.google.gson.Gson;
 
 import java.util.List;
 
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class CreateScenePopup  extends PopupWindow {
@@ -44,7 +31,7 @@ public class CreateScenePopup  extends PopupWindow {
     private RecyclerView make_scene_list;
 
     private LinearLayoutManager mLinearLayoutManager;
-    private makeSceneAdapter makeSceneAdapter;
+    private voiceAdapter voiceAdapter;
     private List<String> scene_list;
     private initBean initBean;
 
@@ -92,16 +79,16 @@ public class CreateScenePopup  extends PopupWindow {
         });
         mLinearLayoutManager = new LinearLayoutManager(activity);
         make_scene_list.setLayoutManager(mLinearLayoutManager);
-        makeSceneAdapter = new makeSceneAdapter(activity,scene_list);
+        voiceAdapter = new voiceAdapter(activity,scene_list);
 
-        makeSceneAdapter.setOnMakeItemEvent(new makeSceneAdapter.OnMakeItemEvent() {
+        voiceAdapter.setOnMakeItemEvent(new voiceAdapter.OnMakeItemEvent() {
             @Override
             public void onItemClick(int position) {
                 scene_select=scene_list.get(position);
-                makeSceneAdapter.makeSceneClick(position);
+                voiceAdapter.makeSceneClick(position);
             }
         });
-        make_scene_list.setAdapter(makeSceneAdapter);
+        make_scene_list.setAdapter(voiceAdapter);
 
         make_scene.setOnClickListener(new View.OnClickListener() {
             @Override
