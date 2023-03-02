@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/message_container"
     >
 
     <RelativeLayout
@@ -62,9 +63,46 @@
                     />
             </LinearLayout>
 
+
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:id="@+id/layout_message_translate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/item_correct_bg"
+            android:layout_below="@+id/container1"
+            android:layout_toRightOf="@+id/layout_user"
+            android:layout_marginLeft="5dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            >
+            <RelativeLayout
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_toLeftOf="@+id/speeched"
+                android:layout_marginLeft="10dp"
+                >
 
+                <TextView
+                    android:id="@+id/textview_message_translate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp" />
+
+
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/layout_user"

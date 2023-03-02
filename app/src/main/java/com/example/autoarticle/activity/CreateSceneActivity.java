@@ -1,6 +1,7 @@
 package com.example.autoarticle.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.autoarticle.R;
 import com.example.autoarticle.adapter.voiceAdapter;
+import com.example.autoarticle.utils.SpacesItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +39,7 @@ public class CreateSceneActivity extends AppCompatActivity {
      * 选择音色列表
      */
     private RecyclerView choose_character_voice_list;
-    private LinearLayoutManager voiceLinearLayoutManager;
+    private GridLayoutManager voiceGridLayoutManager;
     private List<String> voiceList;
     private voiceAdapter voiceAdapter;
     /**
@@ -72,7 +74,7 @@ public class CreateSceneActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_scene);
         initObject();
-        initData():
+        initData();
         initView();
 
     }
@@ -92,9 +94,11 @@ public class CreateSceneActivity extends AppCompatActivity {
         create_scene_button = findViewById(R.id.create_scene_button);
         create_scene_choose_character = findViewById(R.id.create_scene_choose_character);
         choose_character_voice_list = findViewById(R.id.choose_character_voice_list);
-        voiceLinearLayoutManager = new LinearLayoutManager(this);
-        choose_character_voice_list.setLayoutManager(voiceLinearLayoutManager);
+        voiceGridLayoutManager = new GridLayoutManager(this,2,RecyclerView.VERTICAL,false);
+        choose_character_voice_list.addItemDecoration(new SpacesItemDecoration(10,10,10,20));
+        choose_character_voice_list.setLayoutManager(voiceGridLayoutManager);
         voiceAdapter = new voiceAdapter(this,voiceList);
+        choose_character_voice_list.setAdapter(voiceAdapter);
         choose_character_speed1 = findViewById(R.id.choose_character_speed1);
         choose_character_speed2 = findViewById(R.id.choose_character_speed2);
         choose_character_speed3 = findViewById(R.id.choose_character_speed3);
@@ -121,10 +125,10 @@ public class CreateSceneActivity extends AppCompatActivity {
                         resetSpeed(1);
                         break;
                     case R.id.choose_character_speed2:
-                        resetSpeed(1);
+                        resetSpeed(2);
                         break;
                     case R.id.choose_character_speed3:
-                        resetSpeed(1);
+                        resetSpeed(3);
                         break;
                     case R.id.choose_character_level1:
                         resetLevel(1);
@@ -145,15 +149,21 @@ public class CreateSceneActivity extends AppCompatActivity {
         choose_character_speed1.setBackground(null);
         choose_character_speed2.setBackground(null);
         choose_character_speed3.setBackground(null);
+        choose_character_speed1.setTextColor(getResources().getColor(R.color.black));
+        choose_character_speed2.setTextColor(getResources().getColor(R.color.black));
+        choose_character_speed3.setTextColor(getResources().getColor(R.color.black));
         switch (type) {
             case 1:
                 choose_character_speed1.setBackground(getResources().getDrawable(R.drawable.create_scene_speed_select));
+                choose_character_speed1.setTextColor(getResources().getColor(R.color.white));
                 break;
             case 2:
                 choose_character_speed2.setBackground(getResources().getDrawable(R.drawable.create_scene_speed_select));
+                choose_character_speed2.setTextColor(getResources().getColor(R.color.white));
                 break;
             case 3:
                 choose_character_speed3.setBackground(getResources().getDrawable(R.drawable.create_scene_speed_select));
+                choose_character_speed2.setTextColor(getResources().getColor(R.color.white));
                 break;
         }
     }
@@ -162,15 +172,21 @@ public class CreateSceneActivity extends AppCompatActivity {
         choose_character_level1.setBackground(null);
         choose_character_level2.setBackground(null);
         choose_character_level3.setBackground(null);
+        choose_character_level1.setTextColor(getResources().getColor(R.color.black));
+        choose_character_level2.setTextColor(getResources().getColor(R.color.black));
+        choose_character_level3.setTextColor(getResources().getColor(R.color.black));
         switch (type) {
             case 1:
                 choose_character_level1.setBackground(getResources().getDrawable(R.drawable.create_scene_speed_select));
+                choose_character_level1.setTextColor(getResources().getColor(R.color.white));
                 break;
             case 2:
                 choose_character_level2.setBackground(getResources().getDrawable(R.drawable.create_scene_speed_select));
+                choose_character_level2.setTextColor(getResources().getColor(R.color.white));
                 break;
             case 3:
                 choose_character_level3.setBackground(getResources().getDrawable(R.drawable.create_scene_speed_select));
+                choose_character_level3.setTextColor(getResources().getColor(R.color.white));
                 break;
         }
     }

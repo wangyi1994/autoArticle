@@ -37,7 +37,7 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final int TYPE_MSG_SEND = C.TYPE_MSG_SEND;
     private final int TYPE_MSG_RECEIVE = C.TYPE_MSG_RECEIVE;
 
-    private List<Button> buttons = new ArrayList<>();
+    private List<View> viewList=new ArrayList<>();
 
     public ChatDetailAdapter(Context context) {
         this.activity = (TalkActivity) context;
@@ -52,23 +52,33 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void resetButton(int position) {
-        if (buttons == null || buttons.size() == 0 || buttons.get(position) == null) {
+        if (viewList == null || viewList.size() == 0 || viewList.get(position) == null) {
             return;
         }
-        buttons.get(position).setBackground(activity.getResources().getDrawable(R.mipmap.speeched));
+        Button button=viewList.get(position).findViewById(R.id.speeched);
+        button.setBackground(activity.getResources().getDrawable(R.mipmap.speeched));
     }
     public void setButton(int position) {
-        if (buttons == null || buttons.size() == 0 || buttons.get(position) == null) {
+        if (viewList == null || viewList.size() == 0 || viewList.get(position) == null) {
             return;
         }
-        buttons.get(position).setBackground(activity.getResources().getDrawable(R.mipmap.pause));
+        Button button=viewList.get(position).findViewById(R.id.speeched);
+        button.setBackground(activity.getResources().getDrawable(R.mipmap.pause));
     }
 
 
     public void resetButton() {
-        for (Button button : buttons) {
+        for (View view : viewList) {
+            Button button=view.findViewById(R.id.speeched);
             button.setBackground(activity.getResources().getDrawable(R.mipmap.speeched));
         }
+    }
+    public void translate(int position,String content){
+        LinearLayout translateContainer=viewList.get(position).findViewById(R.id.layout_message_translate);
+        TextView textview_message_translate=viewList.get(position).findViewById(R.id.textview_message_translate);
+        textview_message_translate.setText(content);
+        translateContainer.setVisibility(View.VISIBLE);
+
     }
 
     /**
@@ -124,7 +134,6 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         ((HolderChatSend) holder).layout_message_correct.setVisibility(View.GONE);
                     }
 
-                    buttons.add(((HolderChatSend) holder).speeched);
                     break;
                 case TYPE_MSG_RECEIVE:
                     character character = chatMessage.getCharacter();
@@ -135,7 +144,7 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     // 否则没有点击相应，至于setHighlightColor方法则是控制点击是的背景色。
 //                    ((HolderChatReceive) holder).tvPraise.setHighlightColor(mContext.getResources().getColor(android.R.color.transparent));
 //                    ((HolderChatReceive) holder).tvPraise.setHighlightColor(mContext.getResources().getColor(R.color.colorPrimary));
-                    buttons.add(((HolderChatReceive) holder).speeched);
+
 
                     break;
                 default:
@@ -164,6 +173,7 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public HolderChatSend(View itemView) {
             super(itemView);
+            viewList.add(itemView);
             tvMsgContent = (TextView) itemView.findViewById(R.id.textview_message);
             layout_message_correct = (LinearLayout) itemView.findViewById(R.id.layout_message_correct);
             textview_message_correct = (TextView) itemView.findViewById(R.id.textview_message_correct);
@@ -218,6 +228,7 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public HolderChatReceive(View itemView) {
             super(itemView);
+            viewList.add(itemView);
             tvMsgContent = (TextView) itemView.findViewById(R.id.textview_message);
             layoutChat = (LinearLayout) itemView.findViewById(R.id.layout_message);
             tvNickName = (TextView) itemView.findViewById(R.id.textview_message);

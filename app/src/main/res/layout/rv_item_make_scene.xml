@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="200dp"
-    android:layout_height="240dp"
+    android:layout_width="150dp"
+    android:layout_height="100dp"
     android:id="@+id/make_scene_container"
     android:background="@color/white"
     >
        <ImageView
-           android:id="make_scene_img"
-           android:layout_width="match_parent"
+           android:layout_centerHorizontal="true"
+           android:id="@+id/make_scene_img"
+           android:layout_width="120dp"
            android:layout_height="match_parent"
            android:src="@drawable/girl_pic"
            android:layout_above="@+id/make_scene_name"/>
@@ -18,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/gray"
-            android:textSize="20dp"
+            android:textSize="10dp"
             android:text="Cyra"
             android:layout_centerHorizontal="true"
             android:layout_above="@+id/make_scene_description"
@@ -28,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="10dp"
             android:text="Cyra"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"

@@ -15,14 +15,18 @@ import static com.example.autoarticle.config.config.speechSubscriptionKey;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,14 +39,18 @@ import com.example.autoarticle.NetWork.RetrofitManager;
 import com.example.autoarticle.R;
 import com.example.autoarticle.adapter.ChatDetailAdapter;
 import com.example.autoarticle.NetWork.requests;
+import com.example.autoarticle.adapter.OptionAdapter;
 import com.example.autoarticle.command.C;
+import com.example.autoarticle.listener.OnRecyclerViewItemClick;
 import com.example.autoarticle.model.ChatMessage;
+import com.example.autoarticle.model.OptionEntity;
 import com.example.autoarticle.model.OralChatBean;
 import com.example.autoarticle.model.character;
 import com.example.autoarticle.model.resultBean;
 import com.example.autoarticle.model.talkBean;
 import com.example.autoarticle.model.talkListBean;
 import com.example.autoarticle.utils.AudioRecoderUtils;
+import com.example.autoarticle.utils.DensityUtil;
 import com.google.gson.Gson;
 import com.microsoft.cognitiveservices.speech.AudioDataStream;
 import com.microsoft.cognitiveservices.speech.ResultReason;
@@ -428,12 +436,113 @@ public class TalkActivity extends Activity implements View.OnClickListener {
 
             @Override
             public void onItemLongClick(View childView, MotionEvent event, int position) {
-
+                ChatMessage chatMessage = mChatMessages.get(position);
+                if(chatMessage.getFrom()==TYPE_MSG_RECEIVE){
+                    mRawX = event.getRawX();
+                    mRawY = event.getRawY();
+                    mPressedPos = position;
+                    Log.d(TAG, "e.getRawX()横坐标=" + mRawX + ", e.getRawY()纵坐标=" + mRawY);
+                    Log.d(TAG, "position=" + position);
+                    initPopWindow(childView, position);
+                }
             }
         });
     }
+    private int mPressedPos; // 聊天及记录被点击的位置
 
 
+    /**
+     * 弹窗界面view
+     */
+    private View mPopContentView;
+    /**
+     * 弹窗
+     */
+    private PopupWindow mPopupWindow;
+    private void initPopWindow(final View selectedView, final int position) {
+
+        List<OptionEntity> optionEntities = new ArrayList<>();
+        optionEntities.add(new OptionEntity(0, null, "翻译"));
+        if (mPopContentView == null) {
+            mPopContentView = View.inflate(this, R.layout.item_list_option_pop, null);
+        }
+        RecyclerView rvOptions = (RecyclerView) mPopContentView.findViewById(R.id.recyclerview_options);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        rvOptions.setLayoutManager(linearLayoutManager);
+        OptionAdapter optionAdapter = new OptionAdapter(this);
+        optionAdapter.setOptionEntities(optionEntities);
+        optionAdapter.setOnRecyclerViewItemClick(new OnRecyclerViewItemClick() {
+            @Override
+            public void onItemClick(View view, int p) {
+                if(p==0){
+                    ChatMessage chatMessage = mChatMessages.get(position);
+                    String msg=chatMessage.getMsgContent();
+                    mChatDetailAdapter.translate(position,msg);
+                    mPopupWindow.dismiss();
+                }
+            }
+        });
+        rvOptions.setAdapter(optionAdapter);
+//        LinearLayout layoutDelete = (LinearLayout) mPopContentView.findViewById(R.id.layout_delete);
+        // 在popupWindow还没有弹出显示之前就测量获取其宽高（单位是px像素）
+        int w = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        int h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        mPopContentView.measure(w, h);
+        int viewWidth = mPopContentView.getMeasuredWidth();//获取测量宽度px
+        int viewHeight = mPopContentView.getMeasuredHeight();//获取测量高度px
+        final int screenWidth = DensityUtil.getScreenWidth(this.getWindow().getDecorView().getContext());
+        final int screenHeight = DensityUtil.getScreenHeight(this.getWindow().getDecorView().getContext());
+        if (mPopupWindow == null) {
+            mPopupWindow = new PopupWindow(mPopContentView, viewWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        }
+        mPopupWindow.setOutsideTouchable(true);
+//        mPopupWindow.setBackgroundDrawable(drawable);
+        mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+        int offX = 20; // 可以自己调整偏移
+        int offY = 20; // 可以自己调整偏移
+        float rawX = mRawX;
+        float rawY = mRawY;
+        if (mRawX <= screenWidth / 2) {
+            rawX = mRawX + offX;
+            if (mRawY < screenHeight / 3) {
+                rawY = mRawY;
+                mPopupWindow.setAnimationStyle(R.style.pop_anim_left_top); //设置动画
+            } else {
+                rawY = mRawY - viewHeight - offY;
+                mPopupWindow.setAnimationStyle(R.style.pop_anim_left_bottom); //设置动画
+            }
+        } else {
+            rawX = mRawX - viewWidth - offX;
+            if (mRawY < screenHeight / 3) {
+                rawY = mRawY;
+                mPopupWindow.setAnimationStyle(R.style.pop_anim_right_top); //设置动画
+            } else {
+                rawY = mRawY - viewHeight;
+                mPopupWindow.setAnimationStyle(R.style.pop_anim_right_bottom); //设置动画
+            }
+        }
+        mPopupWindow.showAtLocation(this.getWindow().getDecorView(), Gravity.NO_GRAVITY, (int) rawX, (int) rawY);
+        /*layoutDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPopupWindow.dismiss();
+                if (mChatMessages.size() <= 0) {
+                    return;
+                } else {
+                    mChatMessages.remove(position);
+                    mChatDetailAdapter.notifyDataSetChanged();
+                    Toast.makeText(MainActivity.this, "已删除此条聊天内容", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });*/
+
+        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                selectedView.setSelected(false);
+            }
+        });
+    }
 
 
 

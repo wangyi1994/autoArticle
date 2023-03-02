@@ -83,13 +83,14 @@ public class voiceAdapter extends RecyclerView.Adapter<voiceAdapter.HolderMakeSc
 
         TextView make_scene_name;
         RelativeLayout make_scene_container;
-        TextView make_scene_name;
+        TextView make_scene_description;
         MotionEvent event;
 
         public HolderMakeScene(View itemView) {
             super(itemView);
             viewList.add(itemView);
             make_scene_name = (TextView) itemView.findViewById(R.id.make_scene_name);
+            make_scene_description= (TextView) itemView.findViewById(R.id.make_scene_description);
             make_scene_container = (RelativeLayout) itemView.findViewById(R.id.make_scene_container);
         }
 
