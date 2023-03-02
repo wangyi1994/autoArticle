@@ -83,6 +83,7 @@ public class voiceAdapter extends RecyclerView.Adapter<voiceAdapter.HolderMakeSc
 
         TextView make_scene_name;
         RelativeLayout make_scene_container;
+        TextView make_scene_name;
         MotionEvent event;
 
         public HolderMakeScene(View itemView) {
