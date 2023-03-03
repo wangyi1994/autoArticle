@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.autoarticle.NetWork.RetrofitManager;
 import com.example.autoarticle.R;
 import com.example.autoarticle.activity.MainActivity;
-import com.example.autoarticle.adapter.voiceAdapter;
+import com.example.autoarticle.adapter.sceneAdapter;
 import com.example.autoarticle.model.DataCenter;
 import com.example.autoarticle.model.initBean;
 
@@ -31,7 +31,7 @@ public class CreateScenePopup  extends PopupWindow {
     private RecyclerView make_scene_list;
 
     private LinearLayoutManager mLinearLayoutManager;
-    private voiceAdapter voiceAdapter;
+    private sceneAdapter sceneAdapter;
     private List<String> scene_list;
     private initBean initBean;
 
@@ -79,16 +79,16 @@ public class CreateScenePopup  extends PopupWindow {
         });
         mLinearLayoutManager = new LinearLayoutManager(activity);
         make_scene_list.setLayoutManager(mLinearLayoutManager);
-        voiceAdapter = new voiceAdapter(activity,scene_list);
+        sceneAdapter = new sceneAdapter(activity,scene_list);
 
-        voiceAdapter.setOnMakeItemEvent(new voiceAdapter.OnMakeItemEvent() {
+        sceneAdapter.setOnMakeItemEvent(new sceneAdapter.OnMakeItemEvent() {
             @Override
             public void onItemClick(int position) {
                 scene_select=scene_list.get(position);
-                voiceAdapter.makeSceneClick(position);
+                sceneAdapter.makeSceneClick(position);
             }
         });
-        make_scene_list.setAdapter(voiceAdapter);
+        make_scene_list.setAdapter(sceneAdapter);
 
         make_scene.setOnClickListener(new View.OnClickListener() {
             @Override

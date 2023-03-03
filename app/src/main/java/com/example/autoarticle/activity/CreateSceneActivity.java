@@ -2,7 +2,6 @@ package com.example.autoarticle.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -12,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.autoarticle.R;
+import com.example.autoarticle.adapter.sceneAdapter;
 import com.example.autoarticle.adapter.voiceAdapter;
 import com.example.autoarticle.utils.SpacesItemDecoration;
 
@@ -24,6 +24,13 @@ public class CreateSceneActivity extends AppCompatActivity {
      * 选择场景列表
      */
     private RecyclerView create_scene_choose_scene;
+
+    /**
+     * 场景列表布局管理器
+     */
+    private GridLayoutManager sceneGridLayoutManager;
+    private List<String> sceneList;
+    private sceneAdapter sceneAdapter;
 
     /**
      * 下一步按钮
@@ -87,10 +94,22 @@ public class CreateSceneActivity extends AppCompatActivity {
         voiceList.add("Ethan");
         voiceList.add("Jack");
         voiceList.add("Prebhat");
+        sceneList = new ArrayList<>();
+        sceneList.add("Ethan");
+        sceneList.add("Jack");
+        sceneList.add("Prebhat");
+        sceneList.add("Ethan");
+        sceneList.add("Jack");
+        sceneList.add("Prebhat");
     }
 
     private void initView() {
         create_scene_choose_scene = findViewById(R.id.create_scene_choose_scene);
+        sceneGridLayoutManager = new GridLayoutManager(this,2,RecyclerView.VERTICAL,false);
+        create_scene_choose_scene.addItemDecoration(new SpacesItemDecoration(10,10,10,20));
+        create_scene_choose_scene.setLayoutManager(sceneGridLayoutManager);
+        sceneAdapter = new sceneAdapter(this,sceneList);
+        create_scene_choose_scene.setAdapter(sceneAdapter);
         create_scene_button = findViewById(R.id.create_scene_button);
         create_scene_choose_character = findViewById(R.id.create_scene_choose_character);
         choose_character_voice_list = findViewById(R.id.choose_character_voice_list);
@@ -120,6 +139,12 @@ public class CreateSceneActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.create_scene_button:
+                        if(create_scene_choose_character.getVisibility()==View.GONE){
+                            create_scene_choose_character.setVisibility(View.VISIBLE);
+                        }
+                        else{
+
+                        }
                         break;
                     case R.id.choose_character_speed1:
                         resetSpeed(1);

@@ -9,41 +9,62 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.autoarticle.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-public class voiceAdapter extends RecyclerView.Adapter<voiceAdapter.HolderMakeScene>{
+public class sceneAdapter extends RecyclerView.Adapter<sceneAdapter.HolderMakeScene>{
     private Context context;
-    private List<String> voiceList;
+    private List<String> sceneList;
 
+    private OnMakeItemEvent onMakeItemEvent;
 
     /**
      *  暂存每个item 的view
      */
     private List<View> viewList;
+    public void setOnMakeItemEvent(OnMakeItemEvent onMakeItemEvent){
+        this.onMakeItemEvent= onMakeItemEvent;
+    }
 
-    public voiceAdapter(Context context, List<String> voiceList) {
+    public void  makeSceneClick(int position) {
+        for(int i =0;i<viewList.size();i++){
+            View itemView=viewList.get(i);
+            TextView  make_scene_name = (TextView) itemView.findViewById(R.id.make_scene_name);
+            RelativeLayout  make_scene_container = (RelativeLayout) itemView.findViewById(R.id.make_scene_container);
+            if(i==position){
+                make_scene_name.setTextColor(context.getResources().getColor(R.color.white));
+                make_scene_container.setBackgroundColor(context.getResources().getColor(R.color.black));
+            }
+            else{
+                make_scene_name.setTextColor(context.getResources().getColor(R.color.black));
+                make_scene_container.setBackgroundColor(context.getResources().getColor(R.color.white));
+            }
+        }
+    }
+
+
+    public sceneAdapter(Context context, List<String> sceneList) {
         this.context = context;
-        this.voiceList=voiceList;
+        this.sceneList=sceneList;
         viewList=new ArrayList<>();
     }
 
     @NonNull
     @Override
-    public voiceAdapter.HolderMakeScene onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public sceneAdapter.HolderMakeScene onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(context).inflate(R.layout.rv_item_make_scene, parent, false);
-        voiceAdapter.HolderMakeScene holderMakeScene = new voiceAdapter.HolderMakeScene(view);
+        sceneAdapter.HolderMakeScene holderMakeScene = new sceneAdapter.HolderMakeScene(view);
         return holderMakeScene;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull voiceAdapter.HolderMakeScene holder, @SuppressLint("RecyclerView") final int position) {
-        String name= voiceList.get(position);
+    public void onBindViewHolder(@NonNull sceneAdapter.HolderMakeScene holder, @SuppressLint("RecyclerView") final int position) {
+        String name= sceneList.get(position);
         holder.make_scene_name.setText(name);
         holder.make_scene_container.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +76,7 @@ public class voiceAdapter extends RecyclerView.Adapter<voiceAdapter.HolderMakeSc
 
     @Override
     public int getItemCount() {
-        return voiceList.size();
+        return sceneList.size();
     }
 
     class HolderMakeScene extends RecyclerView.ViewHolder  {
