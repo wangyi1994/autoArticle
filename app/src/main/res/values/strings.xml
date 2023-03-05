@@ -7,4 +7,7 @@
     <string name="choose_character_speed_text">语速</string>
     <string name="choose_character_voice_text">音色</string>
     <string name="choose_character_level_text">难度</string>
+    <string name="choose_scene_first">请先选择场景</string>
+    <string name="next_step">下一步</string>
+    <string name="create_scene">创建场景</string>
 </resources>

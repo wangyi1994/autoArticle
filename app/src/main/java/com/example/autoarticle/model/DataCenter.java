@@ -30,11 +30,21 @@ public class DataCenter {
 
     private initBean initBean;
 
+    private User user;
+
     public com.example.autoarticle.model.initBean getInitBean() {
         return initBean;
     }
 
     public void setInitBean(com.example.autoarticle.model.initBean initBean) {
         this.initBean = initBean;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -31,21 +32,6 @@ public class sceneAdapter extends RecyclerView.Adapter<sceneAdapter.HolderMakeSc
         this.onMakeItemEvent= onMakeItemEvent;
     }
 
-    public void  makeSceneClick(int position) {
-        for(int i =0;i<viewList.size();i++){
-            View itemView=viewList.get(i);
-            TextView  make_scene_name = (TextView) itemView.findViewById(R.id.make_scene_name);
-            RelativeLayout  make_scene_container = (RelativeLayout) itemView.findViewById(R.id.make_scene_container);
-            if(i==position){
-                make_scene_name.setTextColor(context.getResources().getColor(R.color.white));
-                make_scene_container.setBackgroundColor(context.getResources().getColor(R.color.black));
-            }
-            else{
-                make_scene_name.setTextColor(context.getResources().getColor(R.color.black));
-                make_scene_container.setBackgroundColor(context.getResources().getColor(R.color.white));
-            }
-        }
-    }
 
 
     public sceneAdapter(Context context, List<String> sceneList) {
@@ -69,7 +55,11 @@ public class sceneAdapter extends RecyclerView.Adapter<sceneAdapter.HolderMakeSc
         holder.make_scene_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                for (View container:viewList) {
+                    container.findViewById(R.id.make_scene_checked).setVisibility(View.GONE);
+                }
+                holder.make_scene_checked.setVisibility(View.VISIBLE);
+                onMakeItemEvent.onItemClick(position);
             }
         });
     }
@@ -82,6 +72,8 @@ public class sceneAdapter extends RecyclerView.Adapter<sceneAdapter.HolderMakeSc
     class HolderMakeScene extends RecyclerView.ViewHolder  {
 
         TextView make_scene_name;
+
+        ImageView make_scene_checked;
         RelativeLayout make_scene_container;
         TextView make_scene_description;
         MotionEvent event;
@@ -92,6 +84,7 @@ public class sceneAdapter extends RecyclerView.Adapter<sceneAdapter.HolderMakeSc
             make_scene_name = (TextView) itemView.findViewById(R.id.make_scene_name);
             make_scene_description= (TextView) itemView.findViewById(R.id.make_scene_description);
             make_scene_container = (RelativeLayout) itemView.findViewById(R.id.make_scene_container);
+            make_scene_checked= (ImageView) itemView.findViewById(R.id.make_scene_checked);
         }
 
     }

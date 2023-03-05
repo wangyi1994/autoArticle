@@ -155,6 +155,14 @@ public class AudioRecoderUtils {
         return endTime - startTime;
     }
 
+    public boolean isPlaying(){
+        if(player==null){
+            return false;
+        }
+        return player.isPlaying();
+    }
+
+
     /**
      * 播放录音
      * @param filepath
@@ -201,7 +209,16 @@ public class AudioRecoderUtils {
             }
         }
     }
-
+    public void reset() {
+        if (player != null) {
+            try {
+                //开始播放
+                player.reset();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * 取消录音

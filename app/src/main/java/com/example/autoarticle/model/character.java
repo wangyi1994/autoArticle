@@ -3,6 +3,7 @@ package com.example.autoarticle.model;
 import java.io.Serializable;
 
 public  class character implements Serializable {
+    int id;
     String name;
     String gender;
     String age;
@@ -13,6 +14,14 @@ public  class character implements Serializable {
     String speech_language;
     String speech_speed;
     String customized_features;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

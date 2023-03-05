@@ -2,6 +2,7 @@ package com.example.autoarticle.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,6 +39,8 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final int TYPE_MSG_RECEIVE = C.TYPE_MSG_RECEIVE;
 
     private List<View> viewList=new ArrayList<>();
+    private List<Button> buttonList=new ArrayList<>();
+
 
     public ChatDetailAdapter(Context context) {
         this.activity = (TalkActivity) context;
@@ -55,13 +58,15 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (viewList == null || viewList.size() == 0 || viewList.get(position) == null) {
             return;
         }
-        Button button=viewList.get(position).findViewById(R.id.speeched);
+        Log.d("wangyi", "resetButton 1" );
+        Button button=buttonList.get(position);
         button.setBackground(activity.getResources().getDrawable(R.mipmap.speeched));
     }
     public void setButton(int position) {
         if (viewList == null || viewList.size() == 0 || viewList.get(position) == null) {
             return;
         }
+        Log.d("wangyi", "setButton position:"+position );
         Button button=viewList.get(position).findViewById(R.id.speeched);
         button.setBackground(activity.getResources().getDrawable(R.mipmap.pause));
     }
@@ -76,7 +81,9 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void translate(int position,String content){
         LinearLayout translateContainer=viewList.get(position).findViewById(R.id.layout_message_translate);
         TextView textview_message_translate=viewList.get(position).findViewById(R.id.textview_message_translate);
-        textview_message_translate.setText(content);
+        if(content!=null){
+            textview_message_translate.setText(content);
+        }
         translateContainer.setVisibility(View.VISIBLE);
 
     }
@@ -179,6 +186,7 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             textview_message_correct = (TextView) itemView.findViewById(R.id.textview_message_correct);
             layoutChat = (RelativeLayout) itemView.findViewById(R.id.layout_message);
             speeched = itemView.findViewById(R.id.speeched);
+            buttonList.add(speeched);
             layoutChat.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent e) {
@@ -201,8 +209,6 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         @Override
         public void onClick(View view) {
-
-
             if (mOnRecyclerViewItemEvent != null) {
                 mOnRecyclerViewItemEvent.onItemSpeechClick(view, event, getAdapterPosition());
             }
@@ -233,6 +239,7 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             layoutChat = (LinearLayout) itemView.findViewById(R.id.layout_message);
             tvNickName = (TextView) itemView.findViewById(R.id.textview_message);
             speeched = itemView.findViewById(R.id.speeched);
+            buttonList.add(speeched);
             layoutChat.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent e) {
@@ -254,7 +261,6 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         @Override
         public void onClick(View view) {
-
             if (mOnRecyclerViewItemEvent != null) {
                 mOnRecyclerViewItemEvent.onItemSpeechClick(view, event, getAdapterPosition());
             }

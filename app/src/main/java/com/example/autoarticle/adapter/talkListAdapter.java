@@ -18,17 +18,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.autoarticle.R;
 import com.example.autoarticle.activity.TalkActivity;
-import com.example.autoarticle.model.talkListBean;
+import com.example.autoarticle.model.conversation;
 
 import java.util.List;
 
 public class talkListAdapter extends RecyclerView.Adapter<talkListAdapter.HolderMainTalkItem>{
     private Context context;
-    private List<talkListBean> talkListBeans;
+    private List<conversation> conversations;
 
-    public talkListAdapter(Context context, List<talkListBean> talkListBeans) {
+    public talkListAdapter(Context context, List<conversation> conversations) {
         this.context = context;
-        this.talkListBeans=talkListBeans;
+        this.conversations = conversations;
     }
 
     @NonNull
@@ -41,8 +41,8 @@ public class talkListAdapter extends RecyclerView.Adapter<talkListAdapter.Holder
 
     @Override
     public void onBindViewHolder(@NonNull HolderMainTalkItem holder, int position) {
-        talkListBean bean= talkListBeans.get(position);
-        String name=bean.getScene();
+        conversation bean= conversations.get(position);
+        String name=bean.getScenario().getName();
         holder.main_talk_name.setText(name);
         holder.main_talk_container.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +58,7 @@ public class talkListAdapter extends RecyclerView.Adapter<talkListAdapter.Holder
 
     @Override
     public int getItemCount() {
-        return talkListBeans.size();
+        return conversations.size();
     }
 
     class HolderMainTalkItem extends RecyclerView.ViewHolder  {

@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="150dp"
-    android:layout_height="100dp"
+    android:layout_height="120dp"
     android:id="@+id/make_scene_container"
     android:background="@color/white"
     >
@@ -13,6 +13,16 @@
            android:layout_height="match_parent"
            android:src="@drawable/girl_pic"
            android:layout_above="@+id/make_scene_name"/>
+
+        <ImageView
+            android:id="@+id/make_scene_checked"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="7dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:visibility="gone"
+            android:src="@drawable/checked" />
 
         <TextView
             android:id="@+id/make_scene_name"

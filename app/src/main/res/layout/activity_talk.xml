@@ -50,11 +50,10 @@
     <LinearLayout
         android:id="@+id/bottom"
         android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
-        android:orientation="horizontal"
         android:gravity="center_horizontal"
         >
 
@@ -63,15 +62,19 @@
         <!--            android:digits="@string/input_limit"-->
         <Button
             android:id="@+id/speech"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="40dp"
             android:textColor="#fff"
+            android:layout_marginLeft="30dp"
             android:background="@drawable/talk_button_bg"
             android:text="record" />
         <Button
             android:id="@+id/inspire"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginRight="30dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="20dp"
             android:background="@drawable/talk_button_bg"
             android:textColor="#fff"

@@ -5,10 +5,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.autoarticle.R;
 import com.example.autoarticle.adapter.sceneAdapter;
@@ -76,6 +78,10 @@ public class CreateSceneActivity extends AppCompatActivity {
 
     private View.OnClickListener onClickListener;
 
+    private TextView create_scene_title;
+
+    private String scene;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +115,12 @@ public class CreateSceneActivity extends AppCompatActivity {
         create_scene_choose_scene.addItemDecoration(new SpacesItemDecoration(10,10,10,20));
         create_scene_choose_scene.setLayoutManager(sceneGridLayoutManager);
         sceneAdapter = new sceneAdapter(this,sceneList);
+        sceneAdapter.setOnMakeItemEvent(new sceneAdapter.OnMakeItemEvent() {
+            @Override
+            public void onItemClick(int position) {
+                scene=sceneList.get(position);
+            }
+        });
         create_scene_choose_scene.setAdapter(sceneAdapter);
         create_scene_button = findViewById(R.id.create_scene_button);
         create_scene_choose_character = findViewById(R.id.create_scene_choose_character);
@@ -118,6 +130,7 @@ public class CreateSceneActivity extends AppCompatActivity {
         choose_character_voice_list.setLayoutManager(voiceGridLayoutManager);
         voiceAdapter = new voiceAdapter(this,voiceList);
         choose_character_voice_list.setAdapter(voiceAdapter);
+        create_scene_title=findViewById(R.id.create_scene_title);
         choose_character_speed1 = findViewById(R.id.choose_character_speed1);
         choose_character_speed2 = findViewById(R.id.choose_character_speed2);
         choose_character_speed3 = findViewById(R.id.choose_character_speed3);
@@ -139,12 +152,17 @@ public class CreateSceneActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.create_scene_button:
+                        if(TextUtils.isEmpty(scene)){
+                            Toast.makeText(CreateSceneActivity.this,R.string.choose_scene_first,Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         if(create_scene_choose_character.getVisibility()==View.GONE){
                             create_scene_choose_character.setVisibility(View.VISIBLE);
+                            create_scene_choose_scene.setVisibility(View.GONE);
+                            create_scene_button.setText(R.string.create_scene);
+                            return;
                         }
-                        else{
 
-                        }
                         break;
                     case R.id.choose_character_speed1:
                         resetSpeed(1);
@@ -188,7 +206,7 @@ public class CreateSceneActivity extends AppCompatActivity {
                 break;
             case 3:
                 choose_character_speed3.setBackground(getResources().getDrawable(R.drawable.create_scene_speed_select));
-                choose_character_speed2.setTextColor(getResources().getColor(R.color.white));
+                choose_character_speed3.setTextColor(getResources().getColor(R.color.white));
                 break;
         }
     }

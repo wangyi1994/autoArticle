@@ -9,8 +9,8 @@ public class config {
     // Replace below with your own service region (e.g., "westus").
     public static String serviceRegion = "japanwest";
 
-    public static String IP = "https://www.oralpractice.site:5678";
-
+//    public static String IP = "https://www.oralpractice.site:5678";
+    public static String IP = "http://20.196.219.204:30000";
     public static String TALK_ITEM = "talk_item";
     /**
      * 本地文件根目录名称

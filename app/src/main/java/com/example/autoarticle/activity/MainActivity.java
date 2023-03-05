@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.autoarticle.command.C;
+import com.example.autoarticle.model.User;
+import com.example.autoarticle.model.scenario;
 import com.example.autoarticle.model.talkBean;
 import com.example.autoarticle.NetWork.RetrofitManager;
 import com.example.autoarticle.NetWork.requests;
@@ -24,11 +27,9 @@ import com.example.autoarticle.model.OptionEntity;
 import com.example.autoarticle.model.OralChatBean;
 import com.example.autoarticle.model.character;
 import com.example.autoarticle.model.initBean;
-import com.example.autoarticle.model.talkListBean;
-import com.example.autoarticle.utils.AudioRecoderUtils;
+import com.example.autoarticle.model.conversation;
 import com.google.gson.Gson;
 
-import java.nio.channels.Channel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView talkList;
     private LinearLayoutManager mLinearLayoutManager;
     private talkListAdapter talkListAdapter;
-    private List<talkListBean> talkListBeans;
+    private List<conversation> conversations;
 
     /**
      * 添加场景按钮
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         init();
         initData();
         initView();
@@ -85,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
     }
     private void init(){
         gson =new Gson();
+        User user=new User();
+        user.setId("test_userid1");
+        DataCenter.getInstance().setUser(user);
         retrofit = RetrofitManager.getInstance().getRetrofit();
         add_click=new View.OnClickListener() {
             @Override
@@ -100,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
                 mPopupWindow.dismiss();
                 OptionEntity optionEntity= optionEntities.get(position);
                 if(optionEntity.getOptionName().equals("增加场景")){
-
+                    Intent intent=new Intent(MainActivity.this,CreateSceneActivity.class);
+                    startActivity(intent);
                 }
 
             }
@@ -109,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData(){
-        talkListBeans=new ArrayList<>();
+        conversations =new ArrayList<>();
         requests request=retrofit.create(requests.class);
         Call<ResponseBody> init = request.init();
         init.enqueue(new Callback<ResponseBody>() {
@@ -122,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                     String result=response.body().string();
                     initBean initBean=gson.fromJson(result,initBean.class);
                     DataCenter.getInstance().setInitBean(initBean);
-                    createScene(initBean,"FREE_CHAT");
+                    createScene(initBean);
                 }
                 catch (Exception ex){
                     ex.printStackTrace();
@@ -144,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
        mLinearLayoutManager = new LinearLayoutManager(MainActivity.this);
        talkList.setLayoutManager(mLinearLayoutManager);
-       talkListAdapter=new talkListAdapter(this,talkListBeans);
+       talkListAdapter=new talkListAdapter(this, conversations);
        talkList.setAdapter(talkListAdapter);
    }
 
@@ -163,15 +169,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void createScene(initBean initBean,String scene_select){
+    public void createScene(initBean initBean){
         OralChatBean bean=new OralChatBean();
-        List<String> default_characters=initBean.getDefault_characters().get(0);
-
-        bean.setScenario(scene_select);
-        character character1=new Gson().fromJson(default_characters.get(0), character.class);
-        bean.setCharacter(character1);
+        String default_character=initBean.getDefault_characters().get(0);
+        String default_scenario=initBean.getDefault_scenarios().get(0);
+        bean.setScenario(default_scenario);
+       // character character1=new Gson().fromJson(default_characters, character.class);
+        bean.setCharacter(default_character);
+        bean.setAi_level("TBD");
+        bean.setAi_speed("TBD");
+        bean.setUser(DataCenter.getInstance().getUser());
         String oralChat=new Gson().toJson(bean);
-
         RequestBody requestBody = MultipartBody.create(JSON,oralChat);
         requests request=retrofit.create(requests.class);
         Call<ResponseBody> responseBodyCall = request.create_conversation(requestBody);
@@ -184,20 +192,20 @@ public class MainActivity extends AppCompatActivity {
                     }
                     String result=response.body().string();
                     CreateResult createResult=new Gson().fromJson(result,CreateResult.class);
-                    List<String> default_characters=DataCenter.getInstance().getInitBean().getDefault_characters().get(0);
-                    talkListBean bean=new talkListBean();
-                    bean.setCharacter(gson.fromJson(default_characters.get(0), character.class));
-                    bean.setScene(scene_select);
+                    conversation bean=new conversation();
+                    bean.setConversation_id(createResult.getConversation_id());
+                    bean.setCharacter(gson.fromJson(createResult.getCharacter(), character.class));
+                    bean.setScenario(gson.fromJson(createResult.getScenario(), scenario.class));
                     List<ChatMessage>chatMessages=new ArrayList<>();
                     for (talkBean talkBean:createResult.getGreetings()) {
                         ChatMessage message=new ChatMessage();
                         message.setFrom(C.TYPE_MSG_RECEIVE);
-                        message.setCharacter(gson.fromJson(default_characters.get(0), character.class));
+                        message.setCharacter(gson.fromJson(createResult.getCharacter(), character.class));
                         message.setMsgContent(talkBean.getText());
                         chatMessages.add(message);
                     }
                     bean.setMessages(chatMessages);
-                    talkListBeans.add(bean);
+                    conversations.add(bean);
                     talkListAdapter.notifyDataSetChanged();
                 }
                 catch (Exception ex){
