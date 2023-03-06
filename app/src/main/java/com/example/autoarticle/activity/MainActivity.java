@@ -81,15 +81,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         init();
-        initData();
         initView();
-
+        initData();
     }
     private void init(){
         gson =new Gson();
-        User user=new User();
-        user.setId("test_userid1");
-        DataCenter.getInstance().setUser(user);
+        conversations =new ArrayList<>();
         retrofit = RetrofitManager.getInstance().getRetrofit();
         add_click=new View.OnClickListener() {
             @Override
@@ -115,31 +112,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData(){
-        conversations =new ArrayList<>();
-        requests request=retrofit.create(requests.class);
-        Call<ResponseBody> init = request.init();
-        init.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try{
-                    if(response==null){
-                        return;
-                    }
-                    String result=response.body().string();
-                    initBean initBean=gson.fromJson(result,initBean.class);
-                    DataCenter.getInstance().setInitBean(initBean);
-                    createScene(initBean);
-                }
-                catch (Exception ex){
-                    ex.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.i("test api","t.body:"+t.getMessage());
-            }
-        });
+        if(DataCenter.getInstance().getConversations()==null||DataCenter.getInstance().getConversations().size()==0){
+            createScene(DataCenter.getInstance().getInitBean());
+        }
+        else{
+            conversations.addAll(DataCenter.getInstance().getConversations());
+            talkListAdapter.notifyDataSetChanged();
+        }
     }
 
    private void initView(){

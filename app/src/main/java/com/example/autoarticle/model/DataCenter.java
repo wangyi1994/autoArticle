@@ -31,6 +31,7 @@ public class DataCenter {
     private initBean initBean;
 
     private User user;
+    private List<conversation> conversations;
 
     public com.example.autoarticle.model.initBean getInitBean() {
         return initBean;
@@ -46,5 +47,13 @@ public class DataCenter {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<conversation> getConversations() {
+        return conversations;
+    }
+
+    public void setConversations(List<conversation> conversations) {
+        this.conversations = conversations;
     }
 }
