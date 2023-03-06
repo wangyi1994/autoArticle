@@ -15,5 +15,6 @@ public interface requests {
 
     @POST("/create_conversation")
     Call<ResponseBody> create_conversation( @Body RequestBody body);
-
+    @POST("/get_chat_records")
+    Call<ResponseBody> get_chat( @Body RequestBody body);
 }

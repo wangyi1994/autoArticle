@@ -401,7 +401,6 @@ public class TalkActivity extends Activity implements View.OnClickListener {
                 Log.d(TAG, "wangyi  click" );
                 playPosition = position;
                 mChatDetailAdapter.setButton(playPosition);
-
                 mRecyclerView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
