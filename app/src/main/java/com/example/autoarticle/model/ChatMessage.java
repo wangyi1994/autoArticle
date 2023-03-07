@@ -3,45 +3,16 @@ package com.example.autoarticle.model;
 import java.io.Serializable;
 
 /**
- * @CreateDate: 2018/3/9
- * @Author: lzsheng
+ * @CreateDate: 2023/02
+ * @Author: ey
  * @Description:
  * @Version:
  */
 public class ChatMessage implements Serializable {
 
-    private character character;
-    private int from;
-    private String msgContent;
-
     private String correctMsg;
 
     private String filePath;
-
-    public com.example.autoarticle.model.character getCharacter() {
-        return character;
-    }
-
-    public void setCharacter(com.example.autoarticle.model.character character) {
-        this.character = character;
-    }
-
-
-    public int getFrom() {
-        return from;
-    }
-
-    public void setFrom(int from) {
-        this.from = from;
-    }
-
-    public String getMsgContent() {
-        return msgContent;
-    }
-
-    public void setMsgContent(String msgContent) {
-        this.msgContent = msgContent;
-    }
 
     public String getCorrectMsg() {
         return correctMsg;
@@ -57,5 +28,40 @@ public class ChatMessage implements Serializable {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    /**
+     * 该段对话的角色
+     */
+    private String role;
+    /**
+     * 该段对话的内容
+     */
+    private String text;
+
+    private String datetime;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getDatetime() {
+        return datetime;
+    }
+
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
     }
 }

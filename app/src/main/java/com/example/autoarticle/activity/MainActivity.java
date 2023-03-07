@@ -11,9 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.autoarticle.command.C;
-import com.example.autoarticle.model.User;
 import com.example.autoarticle.model.scenario;
-import com.example.autoarticle.model.talkBean;
 import com.example.autoarticle.NetWork.RetrofitManager;
 import com.example.autoarticle.NetWork.requests;
 import com.example.autoarticle.PopupWindow.MainToolPopup;
@@ -113,7 +111,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void initData(){
         if(DataCenter.getInstance().getConversations()==null||DataCenter.getInstance().getConversations().size()==0){
-            createScene(DataCenter.getInstance().getInitBean());
+            if(DataCenter.getInstance().getInitBean()!=null){
+                createScene(DataCenter.getInstance().getInitBean());
+            }
         }
         else{
             conversations.addAll(DataCenter.getInstance().getConversations());
@@ -175,15 +175,7 @@ public class MainActivity extends AppCompatActivity {
                     bean.setConversation_id(createResult.getConversation_id());
                     bean.setCharacter(gson.fromJson(createResult.getCharacter(), character.class));
                     bean.setScenario(gson.fromJson(createResult.getScenario(), scenario.class));
-                    List<ChatMessage>chatMessages=new ArrayList<>();
-                    for (talkBean talkBean:createResult.getGreetings()) {
-                        ChatMessage message=new ChatMessage();
-                        message.setFrom(C.TYPE_MSG_RECEIVE);
-                        message.setCharacter(gson.fromJson(createResult.getCharacter(), character.class));
-                        message.setMsgContent(talkBean.getText());
-                        chatMessages.add(message);
-                    }
-                    bean.setMessages(chatMessages);
+                    bean.setMessages(createResult.getGreetings());
                     conversations.add(bean);
                     talkListAdapter.notifyDataSetChanged();
                 }

@@ -6,4 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".activity.initActivity">
 
+   <ImageView
+       android:id="@+id/init_advertisement"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,7 @@ import static android.view.MotionEvent.ACTION_UP;
 import static com.example.autoarticle.command.C.TYPE_MSG_RECEIVE;
 import static com.example.autoarticle.command.C.TYPE_MSG_SEND;
 import static com.example.autoarticle.config.config.TALK_ITEM;
+import static com.example.autoarticle.config.config.USER;
 import static com.example.autoarticle.config.config.serviceRegion;
 import static com.example.autoarticle.config.config.speechSubscriptionKey;
 
@@ -40,7 +41,6 @@ import com.example.autoarticle.R;
 import com.example.autoarticle.adapter.ChatDetailAdapter;
 import com.example.autoarticle.NetWork.requests;
 import com.example.autoarticle.adapter.OptionAdapter;
-import com.example.autoarticle.command.C;
 import com.example.autoarticle.listener.OnRecyclerViewItemClick;
 import com.example.autoarticle.model.ChatMessage;
 import com.example.autoarticle.model.DataCenter;
@@ -48,7 +48,6 @@ import com.example.autoarticle.model.OptionEntity;
 import com.example.autoarticle.model.OralChatBean;
 import com.example.autoarticle.model.character;
 import com.example.autoarticle.model.resultBean;
-import com.example.autoarticle.model.talkBean;
 import com.example.autoarticle.model.conversation;
 import com.example.autoarticle.utils.AudioRecoderUtils;
 import com.example.autoarticle.utils.DensityUtil;
@@ -137,13 +136,6 @@ public class TalkActivity extends Activity implements View.OnClickListener {
         init();
 
         initViews();
-        if (conversation != null) {
-            ChatMessage chatMessage = new ChatMessage();
-            chatMessage.setFrom(C.TYPE_MSG_RECEIVE);
-            chatMessage.setCharacter(conversation.getCharacter());
-            chatMessage.setMsgContent(conversation.getMsgContent());
-        }
-
         setViewsData();
         initRetrofit();
         initVedio();
@@ -156,7 +148,15 @@ public class TalkActivity extends Activity implements View.OnClickListener {
 
     private void init() {
         audioConfig = AudioConfig.fromDefaultMicrophoneInput();
-        config = SpeechConfig.fromSubscription(speechSubscriptionKey, serviceRegion);
+        String key="";
+        String regin="";
+        if(DataCenter.getInstance().getInitBean()!=null&&DataCenter.getInstance().getInitBean().getSpeech_api()!=null){
+             key=DataCenter.getInstance().getInitBean().getSpeech_api().getSpeech_key();
+             regin=DataCenter.getInstance().getInitBean().getSpeech_api().getService_region();
+        }
+
+        config = SpeechConfig.fromSubscription(TextUtils.isEmpty(key)?speechSubscriptionKey:key,
+                TextUtils.isEmpty(regin)?serviceRegion:regin);
         // reco = new SpeechRecognizer(config);
     }
 
@@ -185,13 +185,13 @@ public class TalkActivity extends Activity implements View.OnClickListener {
 
                         if (result.getReason() == ResultReason.RecognizedSpeech) {
                             ChatMessage chatMessage = new ChatMessage();
-                            chatMessage.setFrom(TYPE_MSG_SEND);
-                            chatMessage.setMsgContent(result.getText());
+                            chatMessage.setRole(USER);
+                            chatMessage.setText(result.getText());
                             chatMessage.setFilePath(recordingPath);
                             mChatMessages.add(chatMessage);
                             TalkActivity.this.runOnUiThread(() -> runOnUiThread(() -> {
                                 speech.setText(TalkActivity.this.getString(R.string.record));
-                                mChatDetailAdapter.notifyItemInserted(mChatMessages.size());
+                                mChatDetailAdapter.notifyItemInserted(mChatMessages.size()-1);
                                 mRecyclerView.scrollToPosition(mChatMessages.size() - 1);
                             }));
                             getResult("false");
@@ -232,23 +232,11 @@ public class TalkActivity extends Activity implements View.OnClickListener {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private String getResult(String isInspire) {
-
-        List<talkBean> talkBeans = new ArrayList<>();
-        for (int i = mChatMessages.size() - 1; i >= 0; i--) {
-            if (talkBeans.size() == 5) {
-                break;
-            }
-            ChatMessage message = mChatMessages.get(i);
-            talkBean bean = new talkBean();
-            bean.setRole(message.getFrom() == TYPE_MSG_RECEIVE ? conversation.getCharacter().getName() : "User");
-            bean.setText(message.getMsgContent());
-            talkBeans.add(bean);
-        }
-        Collections.reverse(talkBeans);
+        Collections.reverse(mChatMessages);
         Gson gson = new Gson();
         OralChatBean bean = new OralChatBean();
         bean.setUser(DataCenter.getInstance().getUser());
-        bean.setMessages(talkBeans);
+        bean.setMessages(mChatMessages);
         bean.setConversation_id(conversation.getConversation_id());
         bean.setScenario(new Gson().toJson(conversation.getScenario()));
         character character1 = conversation.getCharacter();
@@ -271,17 +259,15 @@ public class TalkActivity extends Activity implements View.OnClickListener {
                     resultBean result = new Gson().fromJson(RESULT, resultBean.class);
                     ChatMessage chatMessage = new ChatMessage();
                     if (isInspire.equals("true")) {
-                        chatMessage.setFrom(TYPE_MSG_SEND);
-                        chatMessage.setCharacter(conversation.getCharacter());
-                        chatMessage.setMsgContent(result.getUser_text());
+                        chatMessage.setRole(USER);
+                        chatMessage.setText(result.getUser_text());
                         mChatMessages.add(chatMessage);
                         mChatDetailAdapter.notifyItemInserted(mChatMessages.size());
                         mRecyclerView.scrollToPosition(mChatMessages.size() - 1);
                         getResult("false");
                     } else {
-                        chatMessage.setFrom(TYPE_MSG_RECEIVE);
-                        chatMessage.setCharacter(conversation.getCharacter());
-                        chatMessage.setMsgContent(result.getAi_text());
+                        chatMessage.setRole(conversation.getCharacter().getName());
+                        chatMessage.setText(result.getAi_text());
                         mChatMessages.get(mChatMessages.size() - 1).setCorrectMsg(result.getCorrected_user_text());
                         mChatDetailAdapter.notifyItemChanged(mChatMessages.size() - 1);
                         try {
@@ -364,7 +350,7 @@ public class TalkActivity extends Activity implements View.OnClickListener {
                 String path = getCacheDir() + "/" + +System.currentTimeMillis() + ".wav";
                 AudioConfig audioConfig = AudioConfig.fromWavFileOutput(path);
                 SpeechSynthesizer synthesizer = new SpeechSynthesizer(config, audioConfig);
-                synthesizer.SpeakText(chatMessage.getMsgContent());
+                synthesizer.SpeakText(chatMessage.getText());
                 chatMessage.setFilePath(path);
             } catch (Exception exp) {
                 Log.i(TAG, "speek azure error :" + exp.getMessage());
@@ -406,7 +392,7 @@ public class TalkActivity extends Activity implements View.OnClickListener {
                     public void run() {
                         ChatMessage chatMessage = mChatMessages.get(playPosition);
                         speek(chatMessage);
-                        Log.d(TAG, "onItemSpeechClick chatMessage getMsgContent =" + chatMessage.getMsgContent());
+                        Log.d(TAG, "onItemSpeechClick chatMessage getMsgContent =" + chatMessage.getText());
                     }
                 }, 500);
 
@@ -416,7 +402,7 @@ public class TalkActivity extends Activity implements View.OnClickListener {
             @Override
             public void onItemLongClick(View childView, MotionEvent event, int position) {
                 ChatMessage chatMessage = mChatMessages.get(position);
-                if (chatMessage.getFrom() == TYPE_MSG_RECEIVE) {
+                if (!chatMessage.getRole().equals(USER)) {
                     mRawX = event.getRawX();
                     mRawY = event.getRawY();
                     mPressedPos = position;
@@ -457,7 +443,7 @@ public class TalkActivity extends Activity implements View.OnClickListener {
             public void onItemClick(View view, int p) {
                 if (p == 0) {
                     ChatMessage chatMessage = mChatMessages.get(position);
-                    String msg = chatMessage.getMsgContent();
+                    String msg = chatMessage.getText();
                     mChatDetailAdapter.translate(position, msg);
                     mPopupWindow.dismiss();
                 }

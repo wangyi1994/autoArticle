@@ -23,6 +23,8 @@ import com.example.autoarticle.model.character;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.autoarticle.config.config.USER;
+
 /**
  * @CreateDate: 2018/1/26
  * @Author: lzsheng
@@ -98,10 +100,10 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public int getItemViewType(int position) {
         if (mChatMessages != null && mChatMessages.size() > 0) {
-            int from = mChatMessages.get(position).getFrom();
-            if (from == C.TYPE_MSG_SEND) {
+            String role = mChatMessages.get(position).getRole();
+            if (role.equals(USER)) {
                 return TYPE_MSG_SEND;
-            } else if (from == C.TYPE_MSG_RECEIVE) {
+            } else  {
                 return TYPE_MSG_RECEIVE;
             }
         }
@@ -128,10 +130,10 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (mChatMessages != null) {
             ChatMessage chatMessage = mChatMessages.get(position);
-            int from = chatMessage.getFrom();
+            int from = chatMessage.getRole().equals(USER)?TYPE_MSG_SEND:TYPE_MSG_RECEIVE;
             switch (from) {
                 case TYPE_MSG_SEND:
-                    String msgContentSend = chatMessage.getMsgContent();
+                    String msgContentSend = chatMessage.getText();
                     ((HolderChatSend) holder).tvMsgContent.setText(msgContentSend);
                     if (!TextUtils.isEmpty(chatMessage.getCorrectMsg())) {
                         String correctMsg = chatMessage.getCorrectMsg();
@@ -143,9 +145,8 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                     break;
                 case TYPE_MSG_RECEIVE:
-                    character character = chatMessage.getCharacter();
-                    ((HolderChatReceive) holder).tvNickName.setText(character.getName());
-                    String msgContentReceive = chatMessage.getMsgContent();
+                    ((HolderChatReceive) holder).tvNickName.setText(chatMessage.getRole());
+                    String msgContentReceive = chatMessage.getText();
                     ((HolderChatReceive) holder).tvMsgContent.setText(msgContentReceive);
                     // 使用ClickableSpan的文本如果想真正实现点击作用，必须为TextView设置setMovementMethod方法，
                     // 否则没有点击相应，至于setHighlightColor方法则是控制点击是的背景色。

@@ -25,4 +25,6 @@ public class config {
      * 本地文件根目录
      */
     public final static String ROOT_PATH = SDPATH + File.separator + ROOT_DIRNAME;
+
+    public final static String USER ="User";
 }

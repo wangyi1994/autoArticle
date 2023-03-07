@@ -10,17 +10,17 @@ import java.util.List;
 
 public class CreateResult {
     private int conversation_id;
-    private List<talkBean> greetings;
+    private List<ChatMessage> greetings;
 
     private String character;
 
     private String scenario;
 
-    public List<talkBean> getGreetings() {
+    public List<ChatMessage> getGreetings() {
         return greetings;
     }
 
-    public void setGreetings(List<talkBean> greetings) {
+    public void setGreetings(List<ChatMessage> greetings) {
         this.greetings = greetings;
     }
 

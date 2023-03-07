@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.example.autoarticle.NetWork.RetrofitManager;
 import com.example.autoarticle.NetWork.ServerManager;
@@ -14,6 +15,7 @@ import com.example.autoarticle.command.C;
 import com.example.autoarticle.model.ChatMessage;
 import com.example.autoarticle.model.CreateResult;
 import com.example.autoarticle.model.DataCenter;
+import com.example.autoarticle.model.OralChatBean;
 import com.example.autoarticle.model.User;
 import com.example.autoarticle.model.character;
 import com.example.autoarticle.model.conversation;
@@ -22,6 +24,7 @@ import com.example.autoarticle.model.scenario;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,6 +40,8 @@ public class initActivity extends AppCompatActivity {
     private Retrofit retrofit;
     private Gson gson;
 
+    private ImageView advertisement;
+
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     @Override
@@ -44,6 +49,7 @@ public class initActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init);
         init();
+        initView();
         initData();
     }
     private void init(){
@@ -52,6 +58,9 @@ public class initActivity extends AppCompatActivity {
         User user=new User();
         user.setId("test_userid1");
         DataCenter.getInstance().setUser(user);
+    }
+    private void initView(){
+
     }
     private void initData(){
         requests request=retrofit.create(requests.class);
@@ -88,13 +97,23 @@ public class initActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(retrofit2.Call<ResponseBody> call, Response<ResponseBody> response) {
                     try{
+                        Log.i("getChatRecords","");
                         if(response==null||response.body()==null){
                             return;
                         }
                         String result=response.body().string();
-                        conversation[] array = new Gson().fromJson(result,conversation[].class);
-                        List<conversation> list = Arrays.asList(array);
-                        DataCenter.getInstance().setConversations(list);
+                        OralChatBean[] array = new Gson().fromJson(result,OralChatBean[].class);
+                        List<OralChatBean> list = Arrays.asList(array);
+                        List<conversation> conversations = new ArrayList<>();
+                        for (OralChatBean bean:list) {
+                            conversation conversation=new conversation();
+                            conversation.setConversation_id(bean.getConversation_id());
+                            conversation.setCharacter(gson.fromJson(bean.getCharacter(),character.class));
+                            conversation.setScenario(gson.fromJson(bean.getScenario(),scenario.class));
+                            conversation.setMessages(bean.getMessages());
+                            conversations.add(conversation);
+                        }
+                        DataCenter.getInstance().setConversations(conversations);
 
                     }
                     catch (Exception ex){

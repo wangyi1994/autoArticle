@@ -1,5 +1,6 @@
 package com.example.autoarticle.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  * description:
  */
 
-public class OralChatBean {
+public class OralChatBean implements Serializable {
     private int conversation_id;
     private User user;
 
@@ -19,7 +20,7 @@ public class OralChatBean {
 
     private String character;
 
-    private List<talkBean> messages;
+    private List<ChatMessage> messages;
 
     /**
      * 是否开启提示模式
@@ -76,11 +77,11 @@ public class OralChatBean {
     }
 
 
-    public List<talkBean> getMessages() {
+    public List<ChatMessage> getMessages() {
         return messages;
     }
 
-    public void setMessages(List<talkBean> messages) {
+    public void setMessages(List<ChatMessage> messages) {
         this.messages = messages;
     }
 

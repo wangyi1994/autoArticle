@@ -10,7 +10,7 @@ public class conversation implements Serializable {
 
    private scenario scenario;
 
-   private List<ChatMessage > messages;
+   private List<ChatMessage> messages;
    private String msgContent;
 
     public int getConversation_id() {
