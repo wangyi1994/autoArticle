@@ -6,22 +6,39 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.autoarticle.NetWork.ServerManager;
 import com.example.autoarticle.R;
 import com.example.autoarticle.adapter.sceneAdapter;
 import com.example.autoarticle.adapter.voiceAdapter;
+import com.example.autoarticle.model.CreateResult;
+import com.example.autoarticle.model.DataCenter;
+import com.example.autoarticle.model.OralChatBean;
+import com.example.autoarticle.model.character;
+import com.example.autoarticle.model.conversation;
+import com.example.autoarticle.model.initBean;
+import com.example.autoarticle.model.scenario;
+import com.example.autoarticle.utils.L;
 import com.example.autoarticle.utils.SpacesItemDecoration;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class CreateSceneActivity extends AppCompatActivity {
 
+    private String TAG=CreateSceneActivity.class.getSimpleName();
     /**
      * 选择场景列表
      */
@@ -31,7 +48,7 @@ public class CreateSceneActivity extends AppCompatActivity {
      * 场景列表布局管理器
      */
     private GridLayoutManager sceneGridLayoutManager;
-    private List<String> sceneList;
+    private List<scenario> sceneList;
     private sceneAdapter sceneAdapter;
 
     /**
@@ -49,7 +66,7 @@ public class CreateSceneActivity extends AppCompatActivity {
      */
     private RecyclerView choose_character_voice_list;
     private GridLayoutManager voiceGridLayoutManager;
-    private List<String> voiceList;
+    private List<character> voiceList;
     private voiceAdapter voiceAdapter;
     /**
      * 语速1
@@ -80,7 +97,9 @@ public class CreateSceneActivity extends AppCompatActivity {
 
     private TextView create_scene_title;
 
-    private String scene;
+    private scenario scene;
+
+    private character character;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,20 +112,15 @@ public class CreateSceneActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        initBean bean= DataCenter.getInstance().getInitBean();
+        if(bean==null){
+            L.i(TAG,"initData initBean is null");
+            return;
+        }
         voiceList = new ArrayList<>();
-        voiceList.add("Ethan");
-        voiceList.add("Jack");
-        voiceList.add("Prebhat");
-        voiceList.add("Ethan");
-        voiceList.add("Jack");
-        voiceList.add("Prebhat");
+        voiceList.addAll(bean.getDefault_characters());
         sceneList = new ArrayList<>();
-        sceneList.add("Ethan");
-        sceneList.add("Jack");
-        sceneList.add("Prebhat");
-        sceneList.add("Ethan");
-        sceneList.add("Jack");
-        sceneList.add("Prebhat");
+        sceneList.addAll(bean.getDefault_scenarios());
     }
 
     private void initView() {
@@ -152,7 +166,7 @@ public class CreateSceneActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.create_scene_button:
-                        if(TextUtils.isEmpty(scene)){
+                        if(scene==null){
                             Toast.makeText(CreateSceneActivity.this,R.string.choose_scene_first,Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -160,9 +174,14 @@ public class CreateSceneActivity extends AppCompatActivity {
                             create_scene_choose_character.setVisibility(View.VISIBLE);
                             create_scene_choose_scene.setVisibility(View.GONE);
                             create_scene_button.setText(R.string.create_scene);
+                            create_scene_title.setText("角色");
                             return;
                         }
-
+                        if(character==null){
+                            Toast.makeText(CreateSceneActivity.this,R.string.choose_character_first,Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        createScene();
                         break;
                     case R.id.choose_character_speed1:
                         resetSpeed(1);
@@ -233,4 +252,44 @@ public class CreateSceneActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    public void createScene(){
+        OralChatBean bean=new OralChatBean();
+        bean.setScenario(scene);
+        // character character1=new Gson().fromJson(default_characters, character.class);
+        bean.setCharacter(character);
+        bean.setAi_level("TBD");
+        bean.setAi_speed("TBD");
+        bean.setUser(DataCenter.getInstance().getUser());
+
+        ServerManager.CreateScene(bean,new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try{
+                    if(response==null||response.body()==null){
+                        return;
+                    }
+                    String result=response.body().string();
+                    CreateResult createResult=new Gson().fromJson(result,CreateResult.class);
+                    conversation bean=new conversation();
+                    bean.setConversation_id(createResult.getConversation_id());
+                    bean.setCharacter(createResult.getCharacter());
+                    bean.setScenario(createResult.getScenario());
+                    bean.setMessages(createResult.getGreetings());
+                }
+                catch (Exception ex){
+                    ex.printStackTrace();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.i("test api","t.body:"+t.getMessage());
+            }
+        });
+
+
+    }
+
 }

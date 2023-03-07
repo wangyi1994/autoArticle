@@ -12,9 +12,9 @@ public class CreateResult {
     private int conversation_id;
     private List<ChatMessage> greetings;
 
-    private String character;
+    private character character;
 
-    private String scenario;
+    private scenario scenario;
 
     public List<ChatMessage> getGreetings() {
         return greetings;
@@ -24,19 +24,19 @@ public class CreateResult {
         this.greetings = greetings;
     }
 
-    public String getCharacter() {
+    public com.example.autoarticle.model.character getCharacter() {
         return character;
     }
 
-    public void setCharacter(String character) {
+    public void setCharacter(com.example.autoarticle.model.character character) {
         this.character = character;
     }
 
-    public String getScenario() {
+    public com.example.autoarticle.model.scenario getScenario() {
         return scenario;
     }
 
-    public void setScenario(String scenario) {
+    public void setScenario(com.example.autoarticle.model.scenario scenario) {
         this.scenario = scenario;
     }
 

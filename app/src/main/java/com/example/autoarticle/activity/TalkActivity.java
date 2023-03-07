@@ -232,15 +232,22 @@ public class TalkActivity extends Activity implements View.OnClickListener {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private String getResult(String isInspire) {
-        Collections.reverse(mChatMessages);
+        List<ChatMessage> talkBeans = new ArrayList<>();
+        for (int i = mChatMessages.size() - 1; i >= 0; i--) {
+            if (talkBeans.size() == 5) {
+                break;
+            }
+            talkBeans.add(mChatMessages.get(i));
+        }
+        Collections.reverse(talkBeans);
         Gson gson = new Gson();
         OralChatBean bean = new OralChatBean();
         bean.setUser(DataCenter.getInstance().getUser());
-        bean.setMessages(mChatMessages);
+        bean.setMessages(talkBeans);
         bean.setConversation_id(conversation.getConversation_id());
-        bean.setScenario(new Gson().toJson(conversation.getScenario()));
+        bean.setScenario(conversation.getScenario());
         character character1 = conversation.getCharacter();
-        bean.setCharacter(new Gson().toJson(character1));
+        bean.setCharacter(character1);
         bean.setInspire_me(isInspire);
         String oralChat = gson.toJson(bean);
 
@@ -271,7 +278,6 @@ public class TalkActivity extends Activity implements View.OnClickListener {
                         mChatMessages.get(mChatMessages.size() - 1).setCorrectMsg(result.getCorrected_user_text());
                         mChatDetailAdapter.notifyItemChanged(mChatMessages.size() - 1);
                         try {
-
                             mChatMessages.add(chatMessage);
                             mChatDetailAdapter.notifyItemInserted(mChatMessages.size());
                             mRecyclerView.scrollToPosition(mChatMessages.size() - 1);
@@ -359,7 +365,7 @@ public class TalkActivity extends Activity implements View.OnClickListener {
         AudioRecoderUtils.getInstance().playRecord(chatMessage.getFilePath(), new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                mChatDetailAdapter.resetButton(playPosition);
+                mChatDetailAdapter.resetButton();
             }
         });
     }
@@ -386,7 +392,7 @@ public class TalkActivity extends Activity implements View.OnClickListener {
                 }
                 Log.d(TAG, "wangyi  click" );
                 playPosition = position;
-                mChatDetailAdapter.setButton(playPosition);
+                mChatDetailAdapter.setButton(childView);
                 mRecyclerView.postDelayed(new Runnable() {
                     @Override
                     public void run() {

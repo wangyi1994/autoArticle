@@ -3,25 +3,25 @@ package com.example.autoarticle.model;
 import java.util.List;
 
 public class initBean {
-    private List<String> default_characters;
+    private List<character> default_characters;
 
-    private List<String> default_scenarios;
+    private List<scenario> default_scenarios;
 
     private SpeechApi speech_api;
 
-    public List<String> getDefault_characters() {
+    public List<character> getDefault_characters() {
         return default_characters;
     }
 
-    public void setDefault_characters(List<String> default_characters) {
+    public void setDefault_characters(List<character> default_characters) {
         this.default_characters = default_characters;
     }
 
-    public List<String> getDefault_scenarios() {
+    public List<scenario> getDefault_scenarios() {
         return default_scenarios;
     }
 
-    public void setDefault_scenarios(List<String> default_scenarios) {
+    public void setDefault_scenarios(List<scenario> default_scenarios) {
         this.default_scenarios = default_scenarios;
     }
 

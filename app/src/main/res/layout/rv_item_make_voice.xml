@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/make_voice_container"
+    android:layout_width="150dp"
+    android:layout_height="120dp">
+
+    <com.example.autoarticle.utils.CircleImageView
+        android:id="@+id/make_voice_img"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/make_voice_name"
+        android:scaleType="centerCrop"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="1dp"
+        android:src="@drawable/girl_pic" />
+
+    <TextView
+        android:id="@+id/make_voice_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/make_voice_description"
+        android:layout_centerHorizontal="true"
+        android:text="Cyra"
+        android:textColor="@color/gray"
+        android:textSize="10dp" />
+
+    <TextView
+        android:id="@+id/make_voice_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Cyra"
+        android:textColor="@color/black"
+        android:textSize="10dp" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:background="#DCDCDC" />
+</RelativeLayout>

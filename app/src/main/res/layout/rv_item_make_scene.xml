@@ -4,7 +4,6 @@
     android:layout_width="150dp"
     android:layout_height="120dp"
     android:id="@+id/make_scene_container"
-    android:background="@color/white"
     >
        <ImageView
            android:layout_centerHorizontal="true"

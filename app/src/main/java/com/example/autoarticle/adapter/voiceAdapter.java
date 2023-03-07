@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.autoarticle.R;
+import com.example.autoarticle.model.character;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,9 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class voiceAdapter extends RecyclerView.Adapter<voiceAdapter.HolderMakeScene>{
+public class voiceAdapter extends RecyclerView.Adapter<voiceAdapter.HolderMakevoice>{
     private Context context;
-    private List<String> voiceList;
+    private List<character> voiceList;
 
 
     /**
@@ -27,7 +28,7 @@ public class voiceAdapter extends RecyclerView.Adapter<voiceAdapter.HolderMakeSc
      */
     private List<View> viewList;
 
-    public voiceAdapter(Context context, List<String> voiceList) {
+    public voiceAdapter(Context context, List<character> voiceList) {
         this.context = context;
         this.voiceList=voiceList;
         viewList=new ArrayList<>();
@@ -35,17 +36,17 @@ public class voiceAdapter extends RecyclerView.Adapter<voiceAdapter.HolderMakeSc
 
     @NonNull
     @Override
-    public voiceAdapter.HolderMakeScene onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(context).inflate(R.layout.rv_item_make_scene, parent, false);
-        voiceAdapter.HolderMakeScene holderMakeScene = new voiceAdapter.HolderMakeScene(view);
-        return holderMakeScene;
+    public voiceAdapter.HolderMakevoice onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view= LayoutInflater.from(context).inflate(R.layout.rv_item_make_voice, parent, false);
+        voiceAdapter.HolderMakevoice holderMakevoice = new voiceAdapter.HolderMakevoice(view);
+        return holderMakevoice;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull voiceAdapter.HolderMakeScene holder, @SuppressLint("RecyclerView") final int position) {
-        String name= voiceList.get(position);
-        holder.make_scene_name.setText(name);
-        holder.make_scene_container.setOnClickListener(new View.OnClickListener() {
+    public void onBindViewHolder(@NonNull voiceAdapter.HolderMakevoice holder, @SuppressLint("RecyclerView") final int position) {
+        character character= voiceList.get(position);
+        holder.make_voice_name.setText(character.getName());
+        holder.make_voice_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -58,19 +59,19 @@ public class voiceAdapter extends RecyclerView.Adapter<voiceAdapter.HolderMakeSc
         return voiceList.size();
     }
 
-    class HolderMakeScene extends RecyclerView.ViewHolder  {
+    class HolderMakevoice extends RecyclerView.ViewHolder  {
 
-        TextView make_scene_name;
-        RelativeLayout make_scene_container;
-        TextView make_scene_description;
+        TextView make_voice_name;
+        RelativeLayout make_voice_container;
+        TextView make_voice_description;
         MotionEvent event;
 
-        public HolderMakeScene(View itemView) {
+        public HolderMakevoice(View itemView) {
             super(itemView);
             viewList.add(itemView);
-            make_scene_name = (TextView) itemView.findViewById(R.id.make_scene_name);
-            make_scene_description= (TextView) itemView.findViewById(R.id.make_scene_description);
-            make_scene_container = (RelativeLayout) itemView.findViewById(R.id.make_scene_container);
+            make_voice_name = (TextView) itemView.findViewById(R.id.make_voice_name);
+            make_voice_description= (TextView) itemView.findViewById(R.id.make_voice_description);
+            make_voice_container = (RelativeLayout) itemView.findViewById(R.id.make_voice_container);
         }
 
     }

@@ -16,9 +16,9 @@ public class OralChatBean implements Serializable {
     private String ai_level;
 
     private String ai_speed;
-    private String scenario;
+    private scenario scenario;
 
-    private String character;
+    private character character;
 
     private List<ChatMessage> messages;
 
@@ -68,14 +68,21 @@ public class OralChatBean implements Serializable {
         this.ai_speed = ai_speed;
     }
 
-    public String getScenario() {
+    public com.example.autoarticle.model.scenario getScenario() {
         return scenario;
     }
 
-    public void setScenario(String scenario) {
+    public void setScenario(com.example.autoarticle.model.scenario scenario) {
         this.scenario = scenario;
     }
 
+    public com.example.autoarticle.model.character getCharacter() {
+        return character;
+    }
+
+    public void setCharacter(com.example.autoarticle.model.character character) {
+        this.character = character;
+    }
 
     public List<ChatMessage> getMessages() {
         return messages;
@@ -85,13 +92,7 @@ public class OralChatBean implements Serializable {
         this.messages = messages;
     }
 
-    public String getCharacter() {
-        return character;
-    }
 
-    public void setCharacter(String character) {
-        this.character = character;
-    }
 
     public String getInspire_me() {
         return inspire_me;

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.autoarticle.NetWork.ServerManager;
 import com.example.autoarticle.command.C;
 import com.example.autoarticle.model.scenario;
 import com.example.autoarticle.NetWork.RetrofitManager;
@@ -150,19 +151,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void createScene(initBean initBean){
         OralChatBean bean=new OralChatBean();
-        String default_character=initBean.getDefault_characters().get(0);
-        String default_scenario=initBean.getDefault_scenarios().get(0);
+        character default_character=initBean.getDefault_characters().get(0);
+        scenario default_scenario=initBean.getDefault_scenarios().get(0);
         bean.setScenario(default_scenario);
        // character character1=new Gson().fromJson(default_characters, character.class);
         bean.setCharacter(default_character);
         bean.setAi_level("TBD");
         bean.setAi_speed("TBD");
         bean.setUser(DataCenter.getInstance().getUser());
-        String oralChat=new Gson().toJson(bean);
-        RequestBody requestBody = MultipartBody.create(JSON,oralChat);
-        requests request=retrofit.create(requests.class);
-        Call<ResponseBody> responseBodyCall = request.create_conversation(requestBody);
-        responseBodyCall.enqueue(new Callback<ResponseBody>() {
+
+        ServerManager.CreateScene(bean,new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try{
@@ -173,8 +171,8 @@ public class MainActivity extends AppCompatActivity {
                     CreateResult createResult=new Gson().fromJson(result,CreateResult.class);
                     conversation bean=new conversation();
                     bean.setConversation_id(createResult.getConversation_id());
-                    bean.setCharacter(gson.fromJson(createResult.getCharacter(), character.class));
-                    bean.setScenario(gson.fromJson(createResult.getScenario(), scenario.class));
+                    bean.setCharacter(createResult.getCharacter());
+                    bean.setScenario(createResult.getScenario());
                     bean.setMessages(createResult.getGreetings());
                     conversations.add(bean);
                     talkListAdapter.notifyDataSetChanged();
@@ -189,8 +187,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("test api","t.body:"+t.getMessage());
             }
         });
-
-
 
 
     }

@@ -108,8 +108,8 @@ public class initActivity extends AppCompatActivity {
                         for (OralChatBean bean:list) {
                             conversation conversation=new conversation();
                             conversation.setConversation_id(bean.getConversation_id());
-                            conversation.setCharacter(gson.fromJson(bean.getCharacter(),character.class));
-                            conversation.setScenario(gson.fromJson(bean.getScenario(),scenario.class));
+                            conversation.setCharacter(bean.getCharacter());
+                            conversation.setScenario(bean.getScenario());
                             conversation.setMessages(bean.getMessages());
                             conversations.add(conversation);
                         }

@@ -11,7 +11,6 @@ public class conversation implements Serializable {
    private scenario scenario;
 
    private List<ChatMessage> messages;
-   private String msgContent;
 
     public int getConversation_id() {
         return conversation_id;
@@ -35,14 +34,6 @@ public class conversation implements Serializable {
 
     public void setScenario(com.example.autoarticle.model.scenario scenario) {
         this.scenario = scenario;
-    }
-
-    public String getMsgContent() {
-        return msgContent;
-    }
-
-    public void setMsgContent(String msgContent) {
-        this.msgContent = msgContent;
     }
 
     public List<ChatMessage> getMessages() {

@@ -14,13 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.autoarticle.R;
+import com.example.autoarticle.model.scenario;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class sceneAdapter extends RecyclerView.Adapter<sceneAdapter.HolderMakeScene>{
     private Context context;
-    private List<String> sceneList;
+    private List<scenario> sceneList;
 
     private OnMakeItemEvent onMakeItemEvent;
 
@@ -34,7 +35,7 @@ public class sceneAdapter extends RecyclerView.Adapter<sceneAdapter.HolderMakeSc
 
 
 
-    public sceneAdapter(Context context, List<String> sceneList) {
+    public sceneAdapter(Context context, List<scenario> sceneList) {
         this.context = context;
         this.sceneList=sceneList;
         viewList=new ArrayList<>();
@@ -50,8 +51,8 @@ public class sceneAdapter extends RecyclerView.Adapter<sceneAdapter.HolderMakeSc
 
     @Override
     public void onBindViewHolder(@NonNull sceneAdapter.HolderMakeScene holder, @SuppressLint("RecyclerView") final int position) {
-        String name= sceneList.get(position);
-        holder.make_scene_name.setText(name);
+        scenario scenario= sceneList.get(position);
+        holder.make_scene_name.setText(scenario.getName());
         holder.make_scene_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

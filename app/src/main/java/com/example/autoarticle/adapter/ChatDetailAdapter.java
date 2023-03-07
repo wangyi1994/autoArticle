@@ -41,7 +41,6 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final int TYPE_MSG_RECEIVE = C.TYPE_MSG_RECEIVE;
 
     private List<View> viewList=new ArrayList<>();
-    private List<Button> buttonList=new ArrayList<>();
 
 
     public ChatDetailAdapter(Context context) {
@@ -61,16 +60,15 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return;
         }
         Log.d("wangyi", "resetButton 1" );
-        Button button=buttonList.get(position);
+        Button button=viewList.get(position).findViewById(R.id.speeched);
         button.setBackground(activity.getResources().getDrawable(R.mipmap.speeched));
     }
-    public void setButton(int position) {
-        if (viewList == null || viewList.size() == 0 || viewList.get(position) == null) {
+    public void setButton(View childView) {
+        if (childView == null) {
             return;
         }
-        Log.d("wangyi", "setButton position:"+position );
-        Button button=viewList.get(position).findViewById(R.id.speeched);
-        button.setBackground(activity.getResources().getDrawable(R.mipmap.pause));
+        Log.d("wangyi", "setButton " );
+        childView.setBackground(activity.getResources().getDrawable(R.mipmap.pause));
     }
 
 
@@ -187,7 +185,7 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             textview_message_correct = (TextView) itemView.findViewById(R.id.textview_message_correct);
             layoutChat = (RelativeLayout) itemView.findViewById(R.id.layout_message);
             speeched = itemView.findViewById(R.id.speeched);
-            buttonList.add(speeched);
+
             layoutChat.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent e) {
@@ -240,7 +238,7 @@ public class ChatDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             layoutChat = (LinearLayout) itemView.findViewById(R.id.layout_message);
             tvNickName = (TextView) itemView.findViewById(R.id.textview_message);
             speeched = itemView.findViewById(R.id.speeched);
-            buttonList.add(speeched);
+
             layoutChat.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent e) {
