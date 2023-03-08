@@ -142,8 +142,8 @@ public class CreateSceneActivity extends AppCompatActivity {
         create_scene_button = findViewById(R.id.create_scene_button);
         create_scene_choose_character = findViewById(R.id.create_scene_choose_character);
         choose_character_voice_list = findViewById(R.id.choose_character_voice_list);
-        voiceGridLayoutManager = new GridLayoutManager(this, 3, RecyclerView.VERTICAL, false);
-        choose_character_voice_list.addItemDecoration(new SpacesItemDecoration(10, 10, 10, 20));
+        voiceGridLayoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
+        choose_character_voice_list.addItemDecoration(new SpacesItemDecoration(10, 10, 30, 20));
         choose_character_voice_list.setLayoutManager(voiceGridLayoutManager);
         voiceAdapter = new voiceAdapter(this, voiceList);
         voiceAdapter.setOnMakeItemEvent(new voiceAdapter.OnMakeItemEvent() {

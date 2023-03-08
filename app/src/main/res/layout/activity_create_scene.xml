@@ -22,165 +22,166 @@
             android:layout_marginBottom="20dp"
 
             />
+
         <RelativeLayout
-            android:gravity="center_horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
 
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/create_scene_choose_scene"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:padding="20dp"
                 android:layout_centerHorizontal="true"
-                />
+                android:padding="20dp" />
 
 
             <LinearLayout
                 android:id="@+id/create_scene_choose_character"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp"
-                android:visibility="gone"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:visibility="gone">
 
 
                 <TextView
                     android:id="@+id/choose_character_voice_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/choose_character_voice_text"
-                    />
+                    android:text="@string/choose_character_voice_text" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/choose_character_voice_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    />
+                    android:layout_marginTop="10dp" />
+
                 <TextView
-                    android:layout_marginTop="10dp"
                     android:id="@+id/choose_character_speed_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/choose_character_speed_text"
-                    />
+                    android:layout_marginTop="10dp"
+                    android:text="@string/choose_character_speed_text" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="6dp"
                     android:layout_gravity="center_horizontal"
-                    >
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal">
+
                     <View
                         android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_weight="6"
                         android:layout_height="50dp"
-                        android:padding="10dp"
-                        android:orientation="horizontal"
-                        android:background="@drawable/create_scene_speed_container_bg"
                         android:layout_gravity="center_horizontal"
-                        >
+                        android:layout_weight="6"
+                        android:background="@drawable/create_scene_speed_container_bg"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
 
                         <TextView
                             android:id="@+id/choose_character_speed1"
                             android:layout_width="0dp"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:text="较慢"
                             android:gravity="center"
-                            android:layout_height="match_parent"/>
+                            android:text="较慢" />
+
                         <TextView
-                            android:layout_toRightOf="@+id/choose_character_speed1"
                             android:id="@+id/choose_character_speed2"
                             android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@+id/choose_character_speed1"
                             android:layout_weight="1"
-                            android:text="正常"
-                            android:textColor="@color/white"
                             android:gravity="center"
-                            android:background="@drawable/create_scene_speed_select"
-                            android:layout_height="match_parent"/>
+                            android:text="正常"
+                            android:textColor="@color/white" />
+
                         <TextView
-                            android:layout_toRightOf="@+id/choose_character_speed2"
                             android:id="@+id/choose_character_speed3"
                             android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@+id/choose_character_speed2"
                             android:layout_weight="1"
-                            android:text="较快"
                             android:gravity="center"
-                            android:layout_height="match_parent"/>
+                            android:text="较快" />
                     </LinearLayout>
+
                     <View
                         android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
 
                 </LinearLayout>
 
                 <TextView
-                    android:layout_marginTop="10dp"
                     android:id="@+id/choose_character_level_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/choose_character_level_text"
-                    />
+                    android:layout_marginTop="10dp"
+                    android:text="@string/choose_character_level_text" />
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="6dp"
                     android:layout_gravity="center_horizontal"
-                    >
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal">
+
                     <View
                         android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_weight="6"
                         android:layout_height="50dp"
-                        android:padding="10dp"
-                        android:background="@drawable/create_scene_level_container_bg"
                         android:layout_gravity="center_horizontal"
-                        >
+                        android:layout_weight="6"
+                        android:background="@drawable/create_scene_level_container_bg"
+                        android:padding="10dp">
 
                         <TextView
                             android:id="@+id/choose_character_level1"
                             android:layout_width="0dp"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:text="初级"
                             android:gravity="center"
-                            android:layout_height="match_parent"/>
+                            android:text="初级" />
+
                         <TextView
-                            android:layout_toRightOf="@+id/choose_character_level1"
                             android:id="@+id/choose_character_level2"
                             android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@+id/choose_character_level1"
                             android:layout_weight="1"
-                            android:text="正常"
-                            android:textColor="@color/white"
                             android:gravity="center"
-                            android:background="@drawable/create_scene_level_select"
-                            android:layout_height="match_parent"/>
+                            android:text="正常"
+                            android:textColor="@color/white" />
+
                         <TextView
-                            android:layout_toRightOf="@+id/choose_character_level2"
                             android:id="@+id/choose_character_level3"
                             android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@+id/choose_character_level2"
                             android:layout_weight="1"
-                            android:text="困难"
                             android:gravity="center"
-                            android:layout_height="match_parent"/>
+                            android:text="困难" />
                     </LinearLayout>
+
                     <View
                         android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
                 </LinearLayout>
             </LinearLayout>
 
