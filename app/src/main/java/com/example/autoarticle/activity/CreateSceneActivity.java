@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -36,9 +37,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.autoarticle.config.config.TALK_ITEM;
+
 public class CreateSceneActivity extends AppCompatActivity {
 
-    private String TAG=CreateSceneActivity.class.getSimpleName();
+    private String TAG = CreateSceneActivity.class.getSimpleName();
     /**
      * 选择场景列表
      */
@@ -112,9 +115,9 @@ public class CreateSceneActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        initBean bean= DataCenter.getInstance().getInitBean();
-        if(bean==null){
-            L.i(TAG,"initData initBean is null");
+        initBean bean = DataCenter.getInstance().getInitBean();
+        if (bean == null) {
+            L.i(TAG, "initData initBean is null");
             return;
         }
         voiceList = new ArrayList<>();
@@ -125,26 +128,32 @@ public class CreateSceneActivity extends AppCompatActivity {
 
     private void initView() {
         create_scene_choose_scene = findViewById(R.id.create_scene_choose_scene);
-        sceneGridLayoutManager = new GridLayoutManager(this,2,RecyclerView.VERTICAL,false);
-        create_scene_choose_scene.addItemDecoration(new SpacesItemDecoration(10,10,10,20));
+        sceneGridLayoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
+        create_scene_choose_scene.addItemDecoration(new SpacesItemDecoration(10, 10, 10, 20));
         create_scene_choose_scene.setLayoutManager(sceneGridLayoutManager);
-        sceneAdapter = new sceneAdapter(this,sceneList);
+        sceneAdapter = new sceneAdapter(this, sceneList);
         sceneAdapter.setOnMakeItemEvent(new sceneAdapter.OnMakeItemEvent() {
             @Override
             public void onItemClick(int position) {
-                scene=sceneList.get(position);
+                scene = sceneList.get(position);
             }
         });
         create_scene_choose_scene.setAdapter(sceneAdapter);
         create_scene_button = findViewById(R.id.create_scene_button);
         create_scene_choose_character = findViewById(R.id.create_scene_choose_character);
         choose_character_voice_list = findViewById(R.id.choose_character_voice_list);
-        voiceGridLayoutManager = new GridLayoutManager(this,2,RecyclerView.VERTICAL,false);
-        choose_character_voice_list.addItemDecoration(new SpacesItemDecoration(10,10,10,20));
+        voiceGridLayoutManager = new GridLayoutManager(this, 3, RecyclerView.VERTICAL, false);
+        choose_character_voice_list.addItemDecoration(new SpacesItemDecoration(10, 10, 10, 20));
         choose_character_voice_list.setLayoutManager(voiceGridLayoutManager);
-        voiceAdapter = new voiceAdapter(this,voiceList);
+        voiceAdapter = new voiceAdapter(this, voiceList);
+        voiceAdapter.setOnMakeItemEvent(new voiceAdapter.OnMakeItemEvent() {
+            @Override
+            public void onItemClick(int position) {
+                character = voiceList.get(position);
+            }
+        });
         choose_character_voice_list.setAdapter(voiceAdapter);
-        create_scene_title=findViewById(R.id.create_scene_title);
+        create_scene_title = findViewById(R.id.create_scene_title);
         choose_character_speed1 = findViewById(R.id.choose_character_speed1);
         choose_character_speed2 = findViewById(R.id.choose_character_speed2);
         choose_character_speed3 = findViewById(R.id.choose_character_speed3);
@@ -166,19 +175,19 @@ public class CreateSceneActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.create_scene_button:
-                        if(scene==null){
-                            Toast.makeText(CreateSceneActivity.this,R.string.choose_scene_first,Toast.LENGTH_SHORT).show();
+                        if (scene == null) {
+                            Toast.makeText(CreateSceneActivity.this, R.string.choose_scene_first, Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        if(create_scene_choose_character.getVisibility()==View.GONE){
+                        if (create_scene_choose_character.getVisibility() == View.GONE) {
                             create_scene_choose_character.setVisibility(View.VISIBLE);
                             create_scene_choose_scene.setVisibility(View.GONE);
                             create_scene_button.setText(R.string.create_scene);
                             create_scene_title.setText("角色");
                             return;
                         }
-                        if(character==null){
-                            Toast.makeText(CreateSceneActivity.this,R.string.choose_character_first,Toast.LENGTH_SHORT).show();
+                        if (character == null) {
+                            Toast.makeText(CreateSceneActivity.this, R.string.choose_character_first, Toast.LENGTH_SHORT).show();
                             return;
                         }
                         createScene();
@@ -253,31 +262,36 @@ public class CreateSceneActivity extends AppCompatActivity {
         }
     }
 
-    public void createScene(){
-        OralChatBean bean=new OralChatBean();
+    public void createScene() {
+        OralChatBean bean = new OralChatBean();
         bean.setScenario(scene);
         // character character1=new Gson().fromJson(default_characters, character.class);
         bean.setCharacter(character);
         bean.setAi_level("TBD");
         bean.setAi_speed("TBD");
         bean.setUser(DataCenter.getInstance().getUser());
-
-        ServerManager.CreateScene(bean,new Callback<ResponseBody>() {
+        ServerManager.CreateScene(bean, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try{
-                    if(response==null||response.body()==null){
+                try {
+                    if (response == null || response.body() == null) {
                         return;
                     }
-                    String result=response.body().string();
-                    CreateResult createResult=new Gson().fromJson(result,CreateResult.class);
-                    conversation bean=new conversation();
+                    String result = response.body().string();
+                    CreateResult createResult = new Gson().fromJson(result, CreateResult.class);
+                    conversation bean = new conversation();
                     bean.setConversation_id(createResult.getConversation_id());
                     bean.setCharacter(createResult.getCharacter());
                     bean.setScenario(createResult.getScenario());
                     bean.setMessages(createResult.getGreetings());
-                }
-                catch (Exception ex){
+
+                    Intent intent=new Intent(CreateSceneActivity.this, TalkActivity.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable(TALK_ITEM,bean);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    CreateSceneActivity.this.finish();
+                } catch (Exception ex) {
                     ex.printStackTrace();
 
                 }
@@ -285,7 +299,7 @@ public class CreateSceneActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.i("test api","t.body:"+t.getMessage());
+                Log.i("test api", "t.body:" + t.getMessage());
             }
         });
 

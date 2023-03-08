@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/make_voice_container"
-    android:layout_width="150dp"
-    android:layout_height="120dp">
+    android:layout_width="130dp"
+    android:layout_height="130dp"
+    android:layout_margin="3dp">
 
-    <com.example.autoarticle.utils.CircleImageView
-        android:id="@+id/make_voice_img"
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/make_voice_name"
-        android:scaleType="centerCrop"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="1dp"
-        android:src="@drawable/girl_pic" />
+    <RelativeLayout
+        android:layout_width="130dp"
+        android:layout_height="120dp">
+
+        <com.example.autoarticle.utils.CircleImageView
+            android:id="@+id/make_voice_img"
+            android:layout_width="80dp"
+            android:layout_height="90dp"
+            android:scaleType="centerCrop"
+            android:layout_centerInParent="true"
+            android:src="@drawable/girl_pic" />
+        <ImageView
+            android:id="@+id/make_voice_img_focus"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/make_voice_img_focus"
+            android:visibility="gone"
+            />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/make_voice_name"
@@ -35,9 +46,5 @@
         android:textSize="10dp" />
 
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_gravity="bottom"
-        android:background="#DCDCDC" />
+
 </RelativeLayout>

@@ -6,11 +6,13 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.autoarticle.R;
 import com.example.autoarticle.model.character;
+import com.example.autoarticle.utils.BreathFocusView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +29,14 @@ public class voiceAdapter extends RecyclerView.Adapter<voiceAdapter.HolderMakevo
      *  暂存每个item 的view
      */
     private List<View> viewList;
-
+    private OnMakeItemEvent onMakeItemEvent;
     public voiceAdapter(Context context, List<character> voiceList) {
         this.context = context;
         this.voiceList=voiceList;
         viewList=new ArrayList<>();
+    }
+    public void setOnMakeItemEvent(OnMakeItemEvent onMakeItemEvent){
+        this.onMakeItemEvent= onMakeItemEvent;
     }
 
     @NonNull
@@ -49,7 +54,11 @@ public class voiceAdapter extends RecyclerView.Adapter<voiceAdapter.HolderMakevo
         holder.make_voice_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                for (View container:viewList) {
+                    container.findViewById(R.id.make_voice_img_focus).setVisibility(View.GONE);
+                }
+                holder.make_voice_img_focus.setVisibility(View.VISIBLE);
+                onMakeItemEvent.onItemClick(position);
             }
         });
     }
@@ -64,14 +73,16 @@ public class voiceAdapter extends RecyclerView.Adapter<voiceAdapter.HolderMakevo
         TextView make_voice_name;
         RelativeLayout make_voice_container;
         TextView make_voice_description;
-        MotionEvent event;
 
+        ImageView make_voice_img_focus;
+        MotionEvent event;
         public HolderMakevoice(View itemView) {
             super(itemView);
             viewList.add(itemView);
             make_voice_name = (TextView) itemView.findViewById(R.id.make_voice_name);
             make_voice_description= (TextView) itemView.findViewById(R.id.make_voice_description);
             make_voice_container = (RelativeLayout) itemView.findViewById(R.id.make_voice_container);
+            make_voice_img_focus = (ImageView) itemView.findViewById(R.id.make_voice_img_focus);
         }
 
     }

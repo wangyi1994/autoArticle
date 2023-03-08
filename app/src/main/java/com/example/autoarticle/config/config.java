@@ -27,4 +27,24 @@ public class config {
     public final static String ROOT_PATH = SDPATH + File.separator + ROOT_DIRNAME;
 
     public final static String USER ="User";
+
+    /**
+     * 焦点展示模式
+     * 1：呼吸灯
+     * 2：普通
+     */
+    public static final int FOCUS_TYPE = 1;
+
+    /**
+     * 焦点切换方式
+     * 1：飞框
+     * 2：放大
+     */
+    public static final int FOCUS_FLAG = 2;
+
+    /**
+     * 动画时间
+     */
+
+    public final static int ANIMATION_DUR = 400;
 }

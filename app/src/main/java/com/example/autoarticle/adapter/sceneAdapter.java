@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.autoarticle.R;
 import com.example.autoarticle.model.scenario;
+import com.example.autoarticle.utils.BreathFocusView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,9 +58,10 @@ public class sceneAdapter extends RecyclerView.Adapter<sceneAdapter.HolderMakeSc
             @Override
             public void onClick(View view) {
                 for (View container:viewList) {
-                    container.findViewById(R.id.make_scene_checked).setVisibility(View.GONE);
+                    container.findViewById(R.id.focus_view).setVisibility(View.GONE);
                 }
-                holder.make_scene_checked.setVisibility(View.VISIBLE);
+                setFocusBg(holder.make_scene_container,holder.focusView);
+                holder.focusView.setVisibility(View.VISIBLE);
                 onMakeItemEvent.onItemClick(position);
             }
         });
@@ -74,18 +76,16 @@ public class sceneAdapter extends RecyclerView.Adapter<sceneAdapter.HolderMakeSc
 
         TextView make_scene_name;
 
-        ImageView make_scene_checked;
+        BreathFocusView focusView;
         RelativeLayout make_scene_container;
-        TextView make_scene_description;
         MotionEvent event;
 
         public HolderMakeScene(View itemView) {
             super(itemView);
             viewList.add(itemView);
             make_scene_name = (TextView) itemView.findViewById(R.id.make_scene_name);
-            make_scene_description= (TextView) itemView.findViewById(R.id.make_scene_description);
             make_scene_container = (RelativeLayout) itemView.findViewById(R.id.make_scene_container);
-            make_scene_checked= (ImageView) itemView.findViewById(R.id.make_scene_checked);
+            focusView=itemView.findViewById(R.id.focus_view);
         }
 
     }
@@ -93,4 +93,16 @@ public class sceneAdapter extends RecyclerView.Adapter<sceneAdapter.HolderMakeSc
         void onItemClick(int position);
     }
 
+    public void setFocusBg(RelativeLayout root, BreathFocusView focusView) {
+        int offsetSize=(int) context.getResources().getDimension(R.dimen.m100);
+        int offsetMargin= (int) context.getResources().getDimension(R.dimen.m_23);
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) focusView.getLayoutParams();
+        layoutParams.width = root.getWidth()+offsetSize;
+        layoutParams.height = root.getHeight()+offsetSize;
+        layoutParams.topMargin=offsetMargin;
+        layoutParams.bottomMargin=offsetMargin;
+        layoutParams.leftMargin=offsetMargin;
+        layoutParams.rightMargin=offsetMargin;
+        focusView.setLayoutParams(layoutParams);
+    }
 }

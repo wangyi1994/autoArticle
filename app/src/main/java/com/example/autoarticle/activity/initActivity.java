@@ -56,7 +56,7 @@ public class initActivity extends AppCompatActivity {
         gson =new Gson();
         retrofit = RetrofitManager.getInstance().getRetrofit();
         User user=new User();
-        user.setId("test_userid1");
+        user.setId("test_userid2");
         DataCenter.getInstance().setUser(user);
     }
     private void initView(){
