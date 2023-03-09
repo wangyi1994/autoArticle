@@ -169,7 +169,6 @@ public class TalkActivity extends Activity implements View.OnClickListener {
     }
 
     public void onSpeechButtonClicked(boolean isRecording) {
-
         if (isRecording) {
             speech.setText(TalkActivity.this.getString(R.string.record));
             AudioRecoderUtils.getInstance().stopRecording();
@@ -208,6 +207,7 @@ public class TalkActivity extends Activity implements View.OnClickListener {
                 }
             }, 300);
         } else {
+            AudioRecoderUtils.getInstance().stopPlay();
             speech.setText(TalkActivity.this.getString(R.string.recording));
             recordingPath = AudioRecoderUtils.getInstance().startRecording();
         }

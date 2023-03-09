@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -38,9 +39,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-
-import static com.example.autoarticle.activity.TalkActivity.JSON;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -70,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
     private  List<OptionEntity> optionEntities;
 
 
-    private Retrofit retrofit;
 
     private Gson gson;
 
@@ -78,21 +75,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         init();
         initView();
         initData();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
+
     private void init(){
         gson =new Gson();
         conversations =new ArrayList<>();
-        retrofit = RetrofitManager.getInstance().getRetrofit();
         add_click=new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                float endX =   view.getX()+20;
-                float endY =  view.getY()+100;
-                initPopWindow(view,endX,endY);
+//                float endX =   view.getX()+20;
+//                float endY =  view.getY()+100;
+//                initPopWindow(view,endX,endY);
+                Intent intent=new Intent(MainActivity.this,CreateSceneActivity.class);
+                startActivity(intent);
             }
         };
         mainToolClick=new MainToolClick() {
@@ -111,14 +115,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData(){
-        if(DataCenter.getInstance().getConversations()==null||DataCenter.getInstance().getConversations().size()==0){
+        checkData();
+        if(conversations==null||conversations.size()==0){
             if(DataCenter.getInstance().getInitBean()!=null){
                 createScene(DataCenter.getInstance().getInitBean());
             }
         }
         else{
-            conversations.addAll(DataCenter.getInstance().getConversations());
             talkListAdapter.notifyDataSetChanged();
+        }
+    }
+    private void checkData() {
+        if(DataCenter.getInstance().getConversations()==null||DataCenter.getInstance().getConversations().size()==0){
+            if(DataCenter.getInstance().getInitBean()!=null){
+                createScene(DataCenter.getInstance().getInitBean());
+            }
         }
     }
 
