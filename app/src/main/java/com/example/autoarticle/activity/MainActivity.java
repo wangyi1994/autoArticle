@@ -115,21 +115,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData(){
-        checkData();
-        if(conversations==null||conversations.size()==0){
+        if(DataCenter.getInstance().getConversations()==null||DataCenter.getInstance().getConversations().size()==0){
             if(DataCenter.getInstance().getInitBean()!=null){
                 createScene(DataCenter.getInstance().getInitBean());
             }
         }
         else{
+            conversations.addAll(DataCenter.getInstance().getConversations());
             talkListAdapter.notifyDataSetChanged();
-        }
-    }
-    private void checkData() {
-        if(DataCenter.getInstance().getConversations()==null||DataCenter.getInstance().getConversations().size()==0){
-            if(DataCenter.getInstance().getInitBean()!=null){
-                createScene(DataCenter.getInstance().getInitBean());
-            }
         }
     }
 

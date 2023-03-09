@@ -15,6 +15,9 @@ import static com.example.autoarticle.config.config.serviceRegion;
 import static com.example.autoarticle.config.config.speechSubscriptionKey;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
@@ -22,6 +25,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +55,8 @@ import com.example.autoarticle.model.resultBean;
 import com.example.autoarticle.model.conversation;
 import com.example.autoarticle.utils.AudioRecoderUtils;
 import com.example.autoarticle.utils.DensityUtil;
+import com.example.autoarticle.utils.L;
+import com.example.autoarticle.utils.LoadingView;
 import com.google.gson.Gson;
 import com.microsoft.cognitiveservices.speech.ResultReason;
 import com.microsoft.cognitiveservices.speech.SpeechConfig;
@@ -80,7 +86,7 @@ import retrofit2.Retrofit;
  * @Description:
  * @Version:
  */
-public class TalkActivity extends Activity implements View.OnClickListener {
+public class TalkActivity extends BaseActivity implements View.OnClickListener {
 
 
     private conversation conversation;
@@ -165,7 +171,7 @@ public class TalkActivity extends Activity implements View.OnClickListener {
     }
 
     private void onInspireButtonClicked() {
-        getResult("true");
+        getResult("true",true);
     }
 
     public void onSpeechButtonClicked(boolean isRecording) {
@@ -193,7 +199,7 @@ public class TalkActivity extends Activity implements View.OnClickListener {
                                 mChatDetailAdapter.notifyItemInserted(mChatMessages.size()-1);
                                 mRecyclerView.scrollToPosition(mChatMessages.size() - 1);
                             }));
-                            getResult("false");
+                            getResult("false",true);
                         } else {
                             TalkActivity.this.runOnUiThread(() -> runOnUiThread(() -> {
                                 speech.setText(TalkActivity.this.getString(R.string.record));
@@ -231,7 +237,11 @@ public class TalkActivity extends Activity implements View.OnClickListener {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    private String getResult(String isInspire) {
+    private String getResult(String isInspire,boolean showLoading) {
+        if(showLoading){
+            showLoadingDialog();
+        }
+
         List<ChatMessage> talkBeans = new ArrayList<>();
         for (int i = mChatMessages.size() - 1; i >= 0; i--) {
             if (talkBeans.size() == 5) {
@@ -258,6 +268,7 @@ public class TalkActivity extends Activity implements View.OnClickListener {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
+                    disMissLoadingDialog();
                     if (response == null || response.body() == null) {
                         return;
                     }
@@ -271,7 +282,7 @@ public class TalkActivity extends Activity implements View.OnClickListener {
                         mChatMessages.add(chatMessage);
                         mChatDetailAdapter.notifyItemInserted(mChatMessages.size());
                         mRecyclerView.scrollToPosition(mChatMessages.size() - 1);
-                        getResult("false");
+                        getResult("false",false);
                     } else {
                         chatMessage.setRole(conversation.getCharacter().getName());
                         chatMessage.setText(result.getAi_text());
@@ -289,12 +300,14 @@ public class TalkActivity extends Activity implements View.OnClickListener {
 
                 } catch (Exception ex) {
                     ex.printStackTrace();
+                    disMissLoadingDialog();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.i("test api", "t.body:" + t.getMessage());
+                disMissLoadingDialog();
             }
         });
         return "";
@@ -516,6 +529,5 @@ public class TalkActivity extends Activity implements View.OnClickListener {
             }
         });
     }
-
 
 }

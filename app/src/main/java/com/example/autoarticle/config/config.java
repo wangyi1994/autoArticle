@@ -47,4 +47,6 @@ public class config {
      */
 
     public final static int ANIMATION_DUR = 400;
+
+
 }
