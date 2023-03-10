@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
+    <!-- 控件在靠左边：水平布局+
+        android:gravity="center_vertical"
+        android:orientation="horizontal" > -->
+    <!--控件靠右边：垂直布局+right
+        控件靠左边：垂直布局+left -->
+    <!--菜单-->
+    <LinearLayout
+        android:id="@+id/title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentTop="true"
+        android:gravity="right|center"
+        android:orientation="vertical" >
+
+        <!--右上角的注册-->
+        <!--android:textColor="#ff288dfe"-->
+        <TextView
+            android:id="@+id/to_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="25dp"
+            android:singleLine="true"
+            android:text="登录"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/s15" />
+    </LinearLayout>
+    <!--
+    <LinearLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentTop="true"
+        android:background="@mipmap/menu_1"
+        android:gravity="right|center"
+        android:orientation="vertical" >
+        <include layout="@layout/menu" />
+
+    </LinearLayout> -->
+
+
+
+    <RelativeLayout
+        android:id="@+id/login_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_below="@+id/title_layout"
+        android:gravity="center" >
+
+        <!--登录界面图像-->
+        <ImageView
+            android:id="@+id/user_icon"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
+            android:scaleType="fitXY"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:background="@mipmap/logo" />
+
+
+        <!--用户名行布局-->
+        <FrameLayout
+            android:id="@+id/username_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_icon"
+            android:layout_marginTop="30dp"
+            android:gravity="center" >
+
+            <!--用户名编辑框-->
+            <EditText
+                android:id="@+id/register_input_username"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginRight="5dp"
+                android:layout_margin="10dp"
+                android:minHeight="40dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="60dp"
+                android:hint="手机号码/用户名"
+                android:textColorHint="#95A1AA"
+                android:textColor="@android:color/white"
+                android:textCursorDrawable="@drawable/edittext_cursor"
+                android:background="@drawable/edittext_selector"
+                android:singleLine="true" />
+
+
+
+        </FrameLayout>
+
+        <!--密码行布局-->
+        <FrameLayout
+            android:id="@+id/register_passwd_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/username_layout"
+            android:layout_marginTop="0dp"
+            android:gravity="center" >
+
+            <!--密码编辑框-->
+            <EditText
+                android:id="@+id/register_input_password"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:minHeight="40dp"
+                android:maxLength="20"
+                android:paddingLeft="20dp"
+                android:paddingRight="60dp"
+                android:hint="密码"
+                android:gravity="center_vertical"
+                android:textColorHint="#95A1AA"
+                android:textColor="@android:color/white"
+                android:background="@drawable/edittext_selector"
+                android:inputType="textPassword"
+                android:singleLine="true" />
+
+
+            <!--隐藏显示密码按钮-->
+            <ImageView
+                android:id="@+id/register_eye_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/eve_on"   />
+
+        </FrameLayout>
+
+        <!--密码行布局-->
+        <FrameLayout
+            android:id="@+id/register_confirm_passwd_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/register_passwd_layout"
+            android:layout_marginTop="0dp"
+            android:gravity="center" >
+
+            <!--密码编辑框-->
+            <EditText
+                android:id="@+id/register_confirm_input_password"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:minHeight="40dp"
+                android:maxLength="20"
+                android:paddingLeft="20dp"
+                android:paddingRight="60dp"
+                android:hint="确认密码"
+                android:gravity="center_vertical"
+                android:textColorHint="#95A1AA"
+                android:textColor="@android:color/white"
+                android:background="@drawable/edittext_selector"
+                android:inputType="textPassword"
+                android:singleLine="true" />
+
+
+            <!--隐藏显示密码按钮-->
+            <ImageView
+                android:id="@+id/passwd_eye_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/eve_on"   />
+
+        </FrameLayout>
+
+        <!--登录按钮-->
+        <Button
+            android:id="@+id/login_btn"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/register_confirm_passwd_layout"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="60dp"
+            android:text="Sign UP"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:background="@drawable/button_selector"
+            android:gravity="center" />
+
+    </RelativeLayout>
+</RelativeLayout>
