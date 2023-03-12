@@ -2226,5 +2226,8 @@
     <dimen name="m1918">1918.00dp</dimen>
     <dimen name="m1919">1919.00dp</dimen>
     <dimen name="m1920">1920.00dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="fragment_horizontal_margin">16dp</dimen>
+    <dimen name="fragment_vertical_margin">16dp</dimen>
 
 </resources>

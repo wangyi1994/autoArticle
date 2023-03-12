@@ -92,7 +92,9 @@
                 android:paddingRight="60dp"
                 android:hint="手机号码/用户名"
                 android:textColorHint="#95A1AA"
-                android:textColor="@android:color/white"
+                android:textColor="#C6C6D2"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:textCursorDrawable="@drawable/edittext_cursor"
                 android:background="@drawable/edittext_selector"
                 android:singleLine="true" />
@@ -124,7 +126,10 @@
                 android:hint="密码"
                 android:gravity="center_vertical"
                 android:textColorHint="#95A1AA"
-                android:textColor="@android:color/white"
+                android:textColor="#C6C6D2"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textCursorDrawable="@drawable/edittext_cursor"
                 android:background="@drawable/edittext_selector"
                 android:inputType="textPassword"
                 android:singleLine="true" />
@@ -165,7 +170,10 @@
                 android:hint="确认密码"
                 android:gravity="center_vertical"
                 android:textColorHint="#95A1AA"
-                android:textColor="@android:color/white"
+                android:textColor="#C6C6D2"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textCursorDrawable="@drawable/edittext_cursor"
                 android:background="@drawable/edittext_selector"
                 android:inputType="textPassword"
                 android:singleLine="true" />
@@ -182,17 +190,62 @@
                 android:src="@drawable/eve_on"   />
 
         </FrameLayout>
+        <!--密码行布局-->
+        <LinearLayout
+            android:id="@+id/register_code_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/register_confirm_passwd_layout"
+            android:layout_marginTop="0dp"
+            android:gravity="center" >
 
+            <!--密码编辑框-->
+            <EditText
+                android:id="@+id/register_input_code"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="3"
+                android:layout_margin="10dp"
+                android:minHeight="40dp"
+                android:maxLength="20"
+                android:paddingLeft="20dp"
+                android:paddingRight="60dp"
+                android:hint="输入验证码"
+                android:gravity="center_vertical"
+                android:textColorHint="#95A1AA"
+                android:textColor="#C6C6D2"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textCursorDrawable="@drawable/edittext_cursor"
+                android:background="@drawable/edittext_selector"
+                android:inputType="textPassword"
+                android:singleLine="true" />
+            <Button
+                android:id="@+id/register_get_code"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="45dp"
+                android:background="@drawable/button_selector"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:text="验证码"
+                >
+
+            </Button>
+
+
+        </LinearLayout>
         <!--登录按钮-->
         <Button
-            android:id="@+id/login_btn"
+            android:id="@+id/register_btn"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:layout_below="@+id/register_confirm_passwd_layout"
+            android:layout_below="@+id/register_code_layout"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="60dp"
-            android:text="Sign UP"
+            android:text="注册"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="15sp"

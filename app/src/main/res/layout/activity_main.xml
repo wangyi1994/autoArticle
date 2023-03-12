@@ -6,38 +6,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activity.MainActivity">
-    <RelativeLayout
-        android:id="@+id/title"
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/main_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#DCDCDC"
-        android:layout_alignParentTop="true">
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
-
-        <TextView
-            android:id="@+id/teacher_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000"
-            android:text="@string/app_name"
-            android:layout_centerInParent="true"/>
-        <Button
-            android:id="@+id/main_add_conversations"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@mipmap/add"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            />
-    </RelativeLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/talk_list"
+    <com.example.autoarticle.utils.TvRecyclerView
+        android:id="@+id/main_tab"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

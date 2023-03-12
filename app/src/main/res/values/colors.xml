@@ -6,4 +6,6 @@
     <color name="white">#fff</color>
     <color name="black">#000</color>
     <color name="gray">#3D3D3D</color>
+    <color name="button_focus">#11DBAE</color>
+    <color name="button_unfocus">#231815</color>
 </resources>

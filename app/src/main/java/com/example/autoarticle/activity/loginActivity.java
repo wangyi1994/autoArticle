@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.method.DigitsKeyListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,6 +60,18 @@ public class loginActivity extends AppCompatActivity {
         login_btn=findViewById(R.id.login_btn);
         to_register.setOnClickListener(toRegister);
         login_btn.setOnClickListener(Login);
+        login_input_username.setKeyListener(new DigitsKeyListener() {
+            @Override
+            public int getInputType() {
+                return InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL;
+            }
+
+            @Override
+            protected char[] getAcceptedChars() {
+                char[] ac = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+                return ac;
+            }
+        });
     }
 
 

@@ -42,4 +42,17 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+    <declare-styleable name="TvRecyclerView">
+        <attr name="scrollMode" />
+        <attr name="focusDrawable" format="reference" />
+        <attr name="focusScale" format="float" />
+    </declare-styleable>
+    <attr name="scrollMode">
+        <enum name="alignScroll" value="0" />
+        <enum name="followScroll" value="1" />
+        <enum name="normalScroll" value="2" />
+        <enum name="placedtopScroll" value="3" />
+        <enum name="middleScroll" value="4" />
+    </attr>
 </resources>

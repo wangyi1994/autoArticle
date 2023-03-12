@@ -11,18 +11,12 @@ import com.example.autoarticle.NetWork.RetrofitManager;
 import com.example.autoarticle.NetWork.ServerManager;
 import com.example.autoarticle.NetWork.requests;
 import com.example.autoarticle.R;
-import com.example.autoarticle.command.C;
-import com.example.autoarticle.model.ChatMessage;
-import com.example.autoarticle.model.CreateResult;
 import com.example.autoarticle.model.DataCenter;
 import com.example.autoarticle.model.OralChatBean;
 import com.example.autoarticle.model.User;
-import com.example.autoarticle.model.character;
 import com.example.autoarticle.model.conversation;
 import com.example.autoarticle.model.initBean;
-import com.example.autoarticle.model.scenario;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -131,7 +125,7 @@ public class initActivity extends AppCompatActivity {
         );
     }
     private void goActivity(){
-        Intent intent=new Intent(this,MainActivity.class);
+        Intent intent=new Intent(this, MainActivity.class);
         startActivity(intent);
         this.finish();
     }
