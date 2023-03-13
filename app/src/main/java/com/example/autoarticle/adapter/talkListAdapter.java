@@ -5,6 +5,7 @@ import static com.example.autoarticle.config.config.TALK_ITEM;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.autoarticle.R;
 import com.example.autoarticle.activity.TalkActivity;
+import com.example.autoarticle.model.ChatMessage;
 import com.example.autoarticle.model.conversation;
 
 import java.util.List;
@@ -43,6 +45,10 @@ public class talkListAdapter extends RecyclerView.Adapter<talkListAdapter.Holder
     public void onBindViewHolder(@NonNull HolderMainTalkItem holder, int position) {
         conversation bean= conversations.get(position);
         String name=bean.getScenario().getName();
+        List<ChatMessage>messages=bean.getMessages();
+        if(messages!=null&&messages.size()>0&&bean.getCharacter()!=null){
+            holder.main_talk_latest_message.setText(bean.getCharacter().getName()+":  "+messages.get(messages.size()-1).getText());
+        }
         holder.main_talk_name.setText(name);
         holder.main_talk_container.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +71,10 @@ public class talkListAdapter extends RecyclerView.Adapter<talkListAdapter.Holder
 
         ImageView main_talk_portrait;
         TextView main_talk_name;
+        /**
+         * 最后一条消息
+         */
+        TextView main_talk_latest_message;
         FrameLayout main_talk_container;
         MotionEvent event;
 
@@ -72,6 +82,7 @@ public class talkListAdapter extends RecyclerView.Adapter<talkListAdapter.Holder
             super(itemView);
             main_talk_portrait = (ImageView) itemView.findViewById(R.id.main_talk_portrait);
             main_talk_name = (TextView) itemView.findViewById(R.id.main_talk_name);
+            main_talk_latest_message = (TextView) itemView.findViewById(R.id.main_talk_latest_message);
             main_talk_container = (FrameLayout) itemView.findViewById(R.id.main_talk_container);
             main_talk_container.setOnTouchListener(new View.OnTouchListener() {
                 @Override

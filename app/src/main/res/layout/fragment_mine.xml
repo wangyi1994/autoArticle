@@ -1,12 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/mine_background">
 
 
-    <TextView
+
+    <RelativeLayout
+        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="我的"
-        android:textSize="30dp"/>
+        android:layout_height="@dimen/m150">
+
+        <com.example.autoarticle.utils.SemicircleImageView
+            android:id="@+id/mine_portrait"
+            android:layout_width="@dimen/m100"
+            android:layout_height="@dimen/m100"
+            android:src="@drawable/girl_pic"
+            android:layout_marginLeft="@dimen/m30"
+            android:layout_marginTop="@dimen/m30"
+            />
+
+          <TextView
+              android:id="@+id/mine_name"
+              android:layout_toRightOf="@+id/mine_portrait"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/m20"
+              android:layout_marginTop="@dimen/m35"
+              android:text="大王"
+              android:textSize="@dimen/s20"
+              android:textFontWeight="600"
+              />
+        <TextView
+            android:id="@+id/mine_account"
+            android:layout_toRightOf="@+id/mine_portrait"
+            android:layout_below="@+id/mine_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/m20"
+            android:layout_marginTop="@dimen/m15"
+            android:text="账号:1xxx1111111"
+            android:textSize="@dimen/s15"
+            />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/m20"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/m50">
+
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/m20"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/m50">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/m50"
+        android:layout_marginTop="@dimen/m1">
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/m50"
+        android:layout_marginTop="@dimen/m1">
+
+    </LinearLayout>
+
 </LinearLayout>

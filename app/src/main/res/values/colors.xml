@@ -8,4 +8,5 @@
     <color name="gray">#3D3D3D</color>
     <color name="button_focus">#11DBAE</color>
     <color name="button_unfocus">#231815</color>
+    <color name="mine_background">#EDEDED</color>
 </resources>

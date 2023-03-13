@@ -9,22 +9,38 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="@dimen/m5"
+        android:layout_marginBottom="@dimen/m5"
         android:layout_marginLeft="10dp"
         >
-        <TextView
-            android:id="@+id/main_talk_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
-            android:layout_marginLeft="15dp"
-            android:textColor="#898989"
-            android:textSize="20dp"
-            android:text="Cyra"
-            android:layout_toRightOf="@+id/layout_user"
-            />
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           android:layout_marginLeft="15dp"
+           android:layout_toRightOf="@+id/layout_user"
+           android:layout_centerVertical="true">
+           <TextView
+               android:id="@+id/main_talk_name"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textColor="@color/black"
+               android:textSize="@dimen/s15"
+               android:text="Cyra"
+               />
 
+           <TextView
+               android:id="@+id/main_talk_latest_message"
+               android:layout_width="match_parent"
+               android:layout_marginRight="@dimen/m30"
+               android:layout_height="wrap_content"
+               android:textColor="#898989"
+               android:textSize="@dimen/s11"
+               android:singleLine="true"
+               android:ellipsize="end"
+               android:text="Lora:xxxxxxx"
+               />
+       </LinearLayout>
 
         <LinearLayout
             android:id="@+id/layout_user"
@@ -35,10 +51,10 @@
             android:layout_marginTop="10dp"
             >
 
-            <ImageView
+            <com.example.autoarticle.utils.SemicircleImageView
                 android:id="@+id/main_talk_portrait"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/girl_pic"
                 />

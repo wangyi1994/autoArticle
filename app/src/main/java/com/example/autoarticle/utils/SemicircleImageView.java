@@ -53,7 +53,7 @@ public class SemicircleImageView extends ImageView {
         if (null != drawable) {
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
             //设置图片上半部图片圆角
-            Bitmap b = SemicircleImageView.fillet(SemicircleImageView.TOP,bitmap,dp2px(5));
+            Bitmap b = SemicircleImageView.fillet(SemicircleImageView.ALL,bitmap,dp2px(15));
             final Rect rectSrc = new Rect(0, 0, b.getWidth(), b.getHeight());
             final Rect rectDest = new Rect(0, 0, getWidth(), getHeight());
             paint.reset();
